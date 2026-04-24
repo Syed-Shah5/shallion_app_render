@@ -15,14 +15,13 @@ python manage.py shell -c "
 import os
 from django.contrib.auth import get_user_model
 User = get_user_model()
-username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin')
-email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@shallion.com')
 password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
-if password and not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username, email, password)
-    print(f'Superuser \"{username}\" created successfully.')
+if password and not User.objects.filter(email=email).exists():
+    User.objects.create_superuser(email=email, password=password)
+    print(f'Superuser created with email: {email}')
 else:
-    print('Superuser creation skipped (no password provided or user exists).')
+    print('Superuser creation skipped.')
 "
 
 echo "Build completed!"
