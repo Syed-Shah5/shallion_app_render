@@ -1,0 +1,261 @@
+{% extends 'matching/base_matching.html' %}
+
+{% block title %}Match Details - Volunteer Support{% endblock %}
+
+{% block sidebar_content %}
+<div class="profile-card">
+    {% if role == 'CLIENT' %}
+        {% if other_profile.profile_photo %}
+            <img src="{{ other_profile.profile_photo.url }}" 
+                 alt="Profile" 
+                 class="rounded-circle mb-2"
+                 style="width: 80px; height: 80px; object-fit: cover;">
+        {% else %}
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+                 style="width: 80px; height: 80px; font-size: 32px;">
+                {{ other_profile.user.full_name|first|upper }}
+            </div>
+        {% endif %}
+        <h5>{{ other_profile.user.full_name|title }}</h5>
+        <p class="small mb-0">
+            <i class="fas fa-map-marker-alt me-1"></i>
+            {{ other_profile.postcode|default:"Location TBA" }}
+        </p>
+    {% else %}
+        {% if other_profile.profile_photo %}
+            <img src="{{ other_profile.profile_photo.url }}" 
+                 alt="Profile" 
+                 class="rounded-circle mb-2"
+                 style="width: 80px; height: 80px; object-fit: cover;">
+        {% else %}
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+                 style="width: 80px; height: 80px; font-size: 32px;">
+                {{ other_profile.user.full_name|first|upper }}
+            </div>
+        {% endif %}
+        <h5>{{ other_profile.user.full_name|title }}</h5>
+        <p class="small mb-0">
+            <i class="fas fa-map-marker-alt me-1"></i>
+            {{ other_profile.postcode|default:"Location TBA" }}
+        </p>
+    {% endif %}
+</div>
+
+<nav class="nav flex-column">
+    {% if role == 'CLIENT' %}
+    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+       href="{% url 'client:dashboard' %}">
+        <i class="fas fa-tachometer-alt"></i>
+        Dashboard
+    </a>
+    
+    <a class="nav-link" 
+       href="{% url 'client:matched_volunteers' %}">
+        <i class="fas fa-heart"></i>
+        Matched Volunteers
+    </a>
+    {% else %}
+    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+       href="{% url 'volunteer:dashboard' %}">
+        <i class="fas fa-tachometer-alt"></i>
+        Dashboard
+    </a>
+    
+    <a class="nav-link" 
+       href="{% url 'volunteer:matched_clients' %}">
+        <i class="fas fa-users"></i>
+        Matched Clients
+    </a>
+    {% endif %}
+    
+    <hr class="bg-white">
+    
+    <a class="nav-link" href="{% if role == 'CLIENT' %}{% url 'accounts:client_logout' %}{% else %}{% url 'accounts:volunteer_logout' %}{% endif %}">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+    </a>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- Profile Information Card -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="m-0">
+            {% if role == 'CLIENT' %}
+            <i class="fas fa-user"></i> Volunteer Information
+            {% else %}
+            <i class="fas fa-user"></i> Client Information
+            {% endif %}
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if role == 'CLIENT' %}
+            <!-- Volunteer details for client -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Basic Information</h6>
+                    <p><strong>Name:</strong> {{ other_profile.user.full_name|title }}</p>
+                    <p><strong>Email:</strong> {{ other_profile.user.email }}</p>
+                    {% if other_profile.postcode %}
+                    <p><strong>Location:</strong> {{ other_profile.postcode }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Details</h6>
+                    <p><strong>Gender:</strong> {{ other_profile.get_gender_display|default:"Not specified" }}</p>
+                    {% if other_preferences %}
+                    <p><strong>Pet Friendly:</strong> {% if other_preferences.can_work_with_pets %}Yes{% else %}No{% endif %}</p>
+                    <p><strong>Has Transportation:</strong> {% if other_preferences.has_transportation %}Yes{% else %}No{% endif %}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Preferences</h6>
+                    {% if other_preferences %}
+                    <p><strong>Preferred Gender:</strong> {{ other_preferences.get_preferred_gender_display|default:"Not specified" }}</p>
+                    <p><strong>Preferred Languages:</strong> {{ other_preferences.get_preferred_languages_display|join:", "|default:"Not specified" }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Schedule & Tasks</h6>
+                    {% if other_preferences %}
+                    <p><strong>Available Days:</strong> {{ other_preferences.get_preferred_days_display|join:", "|default:"Not specified" }}</p>
+                    <p><strong>Available Times:</strong> {{ other_preferences.get_preferred_times_display|join:", "|default:"Not specified" }}</p>
+                    <p><strong>Tasks:</strong> {{ other_preferences.get_preferred_tasks_display|join:", "|default:"Not specified" }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if other_profile.bio %}
+            <div class="mb-3">
+                <h6 class="text-primary">About</h6>
+                <p>{{ other_profile.bio }}</p>
+            </div>
+            {% endif %}
+        {% else %}
+            <!-- Client details for volunteer -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Basic Information</h6>
+                    <p><strong>Name:</strong> {{ other_profile.user.full_name|title }}</p>
+                    <p><strong>Email:</strong> {{ other_profile.user.email }}</p>
+                    {% if other_profile.postcode %}
+                    <p><strong>Location:</strong> {{ other_profile.postcode }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Details</h6>
+                    <p><strong>Age:</strong> {{ other_profile.age|default:"Not specified" }}</p>
+                    <p><strong>Gender:</strong> {{ other_profile.get_gender_display|default:"Not specified" }}</p>
+                    {% if other_profile.health_conditions %}
+                    <p><strong>Health Conditions:</strong> {{ other_profile.health_conditions }}</p>
+                    {% endif %}
+                    {% if other_preferences %}
+                    <p><strong>I have pets at home:</strong> {% if other_preferences.has_pets %}Yes{% else %}No{% endif %}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Preferences</h6>
+                    {% if other_preferences %}
+                    <p><strong>Preferred Gender:</strong> {{ other_preferences.get_preferred_gender_display|default:"Not specified" }}</p>
+                    <p><strong>Preferred Languages:</strong> {{ other_preferences.get_preferred_languages_display|join:", "|default:"Not specified" }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary mb-3">Schedule & Tasks</h6>
+                    {% if other_preferences %}
+                    <p><strong>Available Days:</strong> {{ other_preferences.get_preferred_days_display|join:", "|default:"Not specified" }}</p>
+                    <p><strong>Available Times:</strong> {{ other_preferences.get_preferred_times_display|join:", "|default:"Not specified" }}</p>
+                    <p><strong>Tasks:</strong> {{ other_preferences.get_preferred_tasks_display|join:", "|default:"Not specified" }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if other_profile.bio %}
+            <div class="mb-3">
+                <h6 class="text-primary">About</h6>
+                <p>{{ other_profile.bio }}</p>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Compatibility Analysis Card -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="m-0"><i class="fas fa-chart-bar"></i> Compatibility Analysis</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <h6>Overall Score</h6>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-success" role="progressbar" 
+                     style="width: {{ match.compatibility_score }}%"
+                     aria-valuenow="{{ match.compatibility_score }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ match.compatibility_score }}%
+                </div>
+            </div>
+        </div>
+        
+        {% if match.matching_notes %}
+        <div>
+            <h6>Matching Notes:</h6>
+            <p class="text-muted" style="white-space: pre-wrap;">{{ match.matching_notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Status and Actions Card -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="m-0"><i class="fas fa-info-circle"></i> Match Status</h5>
+    </div>
+    <div class="card-body">
+        <p class="mb-3">
+            <strong>Current Status:</strong><br>
+            <span class="status-badge status-{{ match.status|lower }}">
+                {{ match.get_status_display }}
+            </span>
+        </p>
+        
+        {% if match.created_at %}
+        <p class="text-muted small">
+            <strong>Created:</strong> {{ match.created_at|date:"M d, Y" }}
+        </p>
+        {% endif %}
+        
+        {% if match.updated_at %}
+        <p class="text-muted small">
+            <strong>Last Updated:</strong> {{ match.updated_at|date:"M d, Y H:i" }}
+        </p>
+        {% endif %}
+        
+        <hr>
+        
+        <div class="d-grid gap-2">
+            {% if role == 'CLIENT' and match.status == 'PENDING' %}
+            <a href="{% url 'matching:respond_to_match' match.id %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane"></i> Send Request to Volunteer
+            </a>
+            
+            {% elif role == 'VOLUNTEER' and match.status == 'SUGGESTED' %}
+            <a href="{% url 'matching:respond_to_match' match.id %}" class="btn btn-success btn-lg">
+                <i class="fas fa-check"></i> Respond to Request
+            </a>
+            
+         
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

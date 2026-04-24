@@ -1,0 +1,131 @@
+{% extends 'matching/base_matching.html' %}
+
+{% block title %}Respond to Match - Volunteer Support{% endblock %}
+
+{% block header %}
+<h1><i class="fas fa-comments"></i> Respond to Match</h1>
+<p class="text-white-50">Make a decision on this compatibility match</p>
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <!-- Match Preview -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="m-0"><i class="fas fa-id-card"></i> Match Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="match-score-badge" style="font-size: 2rem; padding: 1rem 2rem;">
+                        {{ match.compatibility_score }}%
+                    </div>
+                </div>
+                
+                {% if role == 'CLIENT' %}
+                <h6 class="text-primary">Volunteer: {{ match.volunteer.user.full_name }}</h6>
+                {% if match.volunteer.postcode %}
+                <p class="text-muted">📍 {{ match.volunteer.postcode }}</p>
+                {% endif %}
+                {% if match.volunteer.experience_years %}
+                <p class="text-muted">💼 {{ match.volunteer.experience_years }} years experience</p>
+                {% endif %}
+                {% else %}
+                <h6 class="text-primary">Client: {{ match.client.user.full_name }}</h6>
+                {% if match.client.postcode %}
+                <p class="text-muted">📍 {{ match.client.postcode }}</p>
+                {% endif %}
+                {% if match.client.health_conditions %}
+                <p class="text-muted">🏥 {{ match.client.health_conditions }}</p>
+                {% endif %}
+                {% endif %}
+                
+                <div class="alert alert-info mt-3 mb-0">
+                    <strong>Matching Notes:</strong><br>
+                    {{ match.matching_notes }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Response Form -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="m-0"><i class="fas fa-check-circle"></i> Your Decision</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label">How would you like to respond?</label>
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.response %}
+                        <div id="responseOptions" class="d-grid gap-2">
+                            {% for value, label in form.response.field.choices %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" 
+                                       name="response" id="response{{ forloop.counter }}" 
+                                       value="{{ value }}" required>
+                                <label class="form-check-label" for="response{{ forloop.counter }}">
+                                    {% if value == 'accept' %}
+                                        <i class="fas fa-check text-success"></i> 
+                                        <strong>Accept</strong> - I'm interested in this match
+                                    {% else %}
+                                        <i class="fas fa-times text-danger"></i> 
+                                        <strong>Decline</strong> - This isn't a good fit for me
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.response.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {% for error in form.response.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane"></i> Submit Response
+                        </button>
+                        <a href="{% url 'matching:match_detail' match.id %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Match Details
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Information Section -->
+        <div class="alert alert-info mt-4">
+            <h6 class="mb-2"><i class="fas fa-info-circle"></i> What Happens Next?</h6>
+            {% if role == 'CLIENT' %}
+            <p class="mb-0">
+                When you <strong>accept</strong> this match, a request will be sent to the volunteer. 
+                They'll have the opportunity to review and respond to your request.
+            </p>
+            {% else %}
+            <p class="mb-0">
+                When you <strong>accept</strong> this match, the client will be notified and you can 
+                begin the onboarding process. If you <strong>decline</strong>, this match will be archived.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

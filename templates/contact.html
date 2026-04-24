@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — Shallion{% endblock %}
+
+{% block nav_links %}
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/help/">Help</a>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  main { display: block; padding: 0; background: #8B3A2A; color: #fff; }
+
+  /* ── Hero ── */
+  .contact-hero {
+    text-align: center; padding: 4rem 1.5rem 3rem;
+    background: linear-gradient(135deg, #6b2e22 0%, #8B3A2A 100%);
+    color: #fff;
+  }
+  .contact-hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: .5rem; }
+  .contact-hero p  { font-size: 1.0625rem; opacity: .88; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+  /* ── Content grid ── */
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem;
+  }
+  @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  /* ── Contact form card ── */
+  .contact-form-card {
+    background: var(--clr-surface); border: 1px solid var(--clr-border);
+    border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow);
+    color: #1e293b;
+  }
+  .contact-form-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .25rem; }
+  .contact-form-card .subtitle { color: var(--clr-muted); font-size: .875rem; margin-bottom: 1.25rem; }
+
+  .form-group { margin-bottom: 1rem; }
+  .form-label { display: block; font-size: .8125rem; font-weight: 600; margin-bottom: .375rem; }
+  .form-input {
+    width: 100%; padding: .6rem .875rem; border: 1px solid var(--clr-border);
+    border-radius: var(--radius); font-size: .9rem; color: var(--clr-text);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none; font-family: inherit;
+  }
+  .form-input:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(139,58,42,.15); }
+  textarea.form-input { min-height: 7rem; resize: vertical; }
+  select.form-input { cursor: pointer; }
+
+  .char-count { font-size: .7rem; color: var(--clr-muted); text-align: right; margin-top: .125rem; }
+
+  /* ── Info panel ── */
+  .contact-info { display: flex; flex-direction: column; gap: 1.25rem; }
+  .info-card {
+    background: var(--clr-surface); border: 1px solid var(--clr-border);
+    border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow);
+    display: flex; align-items: flex-start; gap: .875rem;
+    transition: border-color var(--transition);
+    color: #1e293b;
+  }
+  .info-card:hover { border-color: var(--clr-primary); }
+  .ic-icon {
+    width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: .5rem;
+    background: #f9ece9; display: flex; align-items: center;
+    justify-content: center; font-size: 1.125rem;
+  }
+  .ic-content h3 { font-size: .9375rem; font-weight: 700; margin-bottom: .125rem; }
+  .ic-content p  { font-size: .8375rem; color: var(--clr-muted); line-height: 1.5; }
+
+  /* ── Response time card ── */
+  .response-card {
+    background: #fdf3f1; border: 1px solid #e8b4aa;
+    border-radius: var(--radius); padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+  .response-card .rc-icon { font-size: 1.5rem; margin-bottom: .375rem; }
+  .response-card h3 { font-size: .9375rem; font-weight: 700; margin-bottom: .25rem; color: #7a3224; }
+  .response-card p  { font-size: .8125rem; color: #7a3224; line-height: 1.5; }
+
+  /* ── Success state ── */
+  .success-state {
+    text-align: center; padding: 2rem 0;
+  }
+  .success-state .ss-icon {
+    width: 3.5rem; height: 3.5rem; border-radius: 50%;
+    background: #f9ece9; color: #8B3A2A; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.5rem; margin: 0 auto .75rem;
+  }
+  .success-state h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: .25rem; }
+  .success-state p  { font-size: .875rem; color: var(--clr-muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="contact-hero">
+  <h1>Contact Us</h1>
+  <p>Have a question, suggestion, or need help? We'd love to hear from you.</p>
+</section>
+
+<!-- Grid -->
+<div class="contact-grid">
+  <!-- Form -->
+  <div class="contact-form-card">
+    <div id="formView">
+      <h2>Send a Message</h2>
+      <p class="subtitle">Fill out the form and we'll get back to you.</p>
+
+      <div class="alert alert-error" id="formError"></div>
+
+      <form id="contactForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="contactName">Full Name</label>
+          <input class="form-input" type="text" id="contactName" placeholder="Your name" required maxlength="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactEmail">Email Address</label>
+          <input class="form-input" type="email" id="contactEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactSubject">Subject</label>
+          <select class="form-input" id="contactSubject">
+            <option value="general">General Enquiry</option>
+            <option value="support">Account / Technical Support</option>
+            <option value="matching">Matching Question</option>
+            <option value="payment">Payment Issue</option>
+            <option value="feedback">Feedback / Suggestion</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactMessage">Message</label>
+          <textarea class="form-input" id="contactMessage" placeholder="How can we help?" required maxlength="2000"></textarea>
+          <div class="char-count"><span id="charUsed">0</span> / 2000</div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="sendBtn">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-state" id="successView" style="display:none;">
+      <div class="ss-icon">✓</div>
+      <h3>Message Sent!</h3>
+      <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+      <button class="btn btn-ghost" id="resetBtn" style="margin-top:1rem;">Send Another Message</button>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div class="contact-info">
+    <div class="info-card">
+      <div class="ic-icon">📧</div>
+      <div class="ic-content">
+        <h3>Email</h3>
+        <p>support@shallion.co.uk</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="ic-icon">📍</div>
+      <div class="ic-content">
+        <h3>Location</h3>
+        <p>United Kingdom</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="ic-icon">💬</div>
+      <div class="ic-content">
+        <h3>Platform Support</h3>
+        <p>Logged-in users can reach support through the in-app messaging system for account-specific issues.</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="ic-icon">📖</div>
+      <div class="ic-content">
+        <h3>Help Centre</h3>
+        <p>Visit our <a href="/how-it-works/" style="color:var(--clr-primary);font-weight:600;">How It Works</a> page for guides and FAQs.</p>
+      </div>
+    </div>
+    <div class="response-card">
+      <div class="rc-icon">⚡</div>
+      <h3>Typical Response Time</h3>
+      <p>We aim to respond to all enquiries within 24 hours during business days.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+

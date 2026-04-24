@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Help & User Manual - Volunteer Support{% endblock %}
+
+{% block nav_links %}
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/contact/">Contact</a>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-12">
+            <!-- Overview Section -->
+            <section id="overview" class="mb-5">
+                <h1 class="display-6 mb-3">
+                    <i class="fas fa-question-circle text-primary"></i> Help & User Manual
+                </h1>
+                <div class="alert alert-info" role="alert">
+                    <strong>Welcome to Shallion Dementia Support!</strong> This guide will help you understand how to use our platform to connect clients with volunteers.
+                </div>
+
+                <h3 class="mt-4">What is Shallion Dementia Support?</h3>
+                <p>Shallion Dementia Support is a platform that connects people who need assistance (Clients) with volunteers who can provide support. The platform helps match clients with suitable volunteers based on location, availability, preferences and required tasks.</p>
+            </section>
+
+            <!-- Getting Started -->
+            <section id="getting-started" class="mb-5">
+                <h2>Getting Started: Registration & Login</h2>
+                
+                <h3>Choose Your Role</h3>
+                <p>Shallion Dementia Support is designed for two types of users:</p>
+                <ul>
+                    <li><strong>Clients</strong> - People who need assistance with daily tasks</li>
+                    <li><strong>Volunteers</strong> - People who want to provide support and help others</li>
+                </ul>
+                <p>The registration process is different for each role, so choose carefully when you start.</p>
+
+                <h3 class="mt-4">For Clients: How to Register</h3>
+                <p><strong>To sign up as a Client:</strong></p>
+                <ol>
+                    <li>On the homepage, click the <strong>"Register as Client"</strong> button</li>
+                    <li>You'll see the Client Registration form. Fill in your information:
+                        <ul>
+                            <li><strong>Full Name:</strong> Enter your first and last name (e.g., "Jane Johnson")</li>
+                            <li><strong>Email:</strong> Enter your email address (e.g., "jane@example.com"). This will be your username for login</li>
+                            <li><strong>Phone Number:</strong> Enter your UK phone number (e.g., "01234 567890" or "+44 1234 567890")</li>
+                        </ul>
+                    </li>
+                    <li>Create a strong password:
+                        <ul>
+                            <li><strong>Create Password:</strong> Must be at least 8 characters and include at least 3 of the following: uppercase letters, lowercase letters, numbers, special characters (!@#$%^&*)</li>
+                            <li><strong>Confirm Password:</strong> Re-enter the same password to verify</li>
+                            <li>Example: "SecurePass123!" or "MyApp@2024"</li>
+                        </ul>
+                    </li>
+                    <li>Upload your GP Certificate:
+                        <ul>
+                            <li><strong>GP Certificate:</strong> Upload a document from your GP (PDF, JPG, or PNG format, max 5MB)</li>
+                            <li>This is required for verification purposes</li>
+                        </ul>
+                    </li>
+                    <li>Check the box to accept the <strong>"Terms and Conditions"</strong></li>
+                    <li>Click <strong>"Create Account"</strong> to complete your registration</li>
+                    <li>You'll see a confirmation message: Registration Complete! Your account has been created successfully.</li>
+                    <li>Your account will be activated once our team verifies your email and GP certificate.</li>
+                </ol>
+
+                <h3 class="mt-4">For Clients: How to Login</h3>
+                <p><strong>To log in as a Client:</strong></p>
+                <ol>
+                    <li>Go to the homepage and click <strong>"Client"</strong></li>
+                    <li>Enter your login credentials:
+                        <ul>
+                            <li><strong>Email:</strong> The email address you used during registration (e.g., "jane@example.com")</li>
+                            <li><strong>Password:</strong> The password you created during registration</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Login"</strong></li>
+                    <li>If your credentials are correct and your account is active, you'll be logged in and taken to your Dashboard</li>
+                    <li>You'll see a success message: "Logged in successfully!"</li>
+                    
+                </ol>
+
+                <h3 class="mt-4">For Volunteers: How to Register</h3>
+                <p><strong>To sign up as a Volunteer:</strong></p>
+                <ol>
+                    <li>On the homepage, click the <strong>"Register as Volunteer"</strong> button</li>
+                    <li>You'll see the Volunteer Registration form. Fill in your information:
+                        <ul>
+                            <li><strong>Full Name:</strong> Enter your first and last name (e.g., "John Smith")</li>
+                            <li><strong>Email:</strong> Enter your email address (e.g., "john@example.com"). This will be your username for login</li>
+                            <li><strong>Phone Number:</strong> Enter your UK phone number (e.g., "01234 567890")</li>
+                            
+                        </ul>
+                    </li>
+                    <li>Create a strong password:
+                        <ul>
+                            <li><strong>Create Password:</strong> Must be at least 8 characters and include at least 3 of the following: uppercase letters, lowercase letters, numbers, special characters (!@#$%^&*)</li>
+                            <li><strong>Confirm Password:</strong> Re-enter the same password to verify</li>
+                            <li>Example: "MyVolunteer@2024"</li>
+                        </ul>
+                    </li>
+                    <li><strong>PVG Number:</strong> Enter your PVG (Protection of Vulnerable Groups) number.</li>
+                    <li>Check the box to accept the <strong>"Terms and Conditions"</strong></li>
+                    <li>Click <strong>"Register as Volunteer"</strong> to complete your registration</li>
+                    <li>You'll see a confirmation message: Registration Complete! Your account has been created successfully.</li>
+                    <li>Your account will be activated once our team verifies your email and PVG number.</li>
+                </ol>
+
+                <h3 class="mt-4">For Volunteers: How to Login</h3>
+                <p><strong>To log in as a Volunteer:</strong></p>
+                <ol>
+                    <li>Go to the homepage and click <strong>"Volunteer"</strong></li>
+                    <li>Enter your login credentials:
+                        <ul>
+                            <li><strong>Email:</strong> The email address you used during registration (e.g., "john@example.com")</li>
+                            <li><strong>Password:</strong> The password you created during registration</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Login"</strong></li>
+                    <li>If your credentials are correct and your account is active, you'll be logged in and taken to your Dashboard</li>
+                    <li>You'll see a success message: "Logged in successfully!"</li>
+                    
+                </ol>
+
+                <h3 class="mt-4">For Both Clients and Volunteers: After Successful Login</h3>
+                <p><strong>Once you're logged in for the first time:</strong></p>
+                <ol>
+                    <li>You'll be taken to your personalized Dashboard</li>
+                    <li>You'll be prompted to complete your full profile (address, personal details, emergency contact information)</li>
+                    <li>After completing your profile, you'll set your preferences (languages, availability, tasks, etc.)</li>
+                    <li>Once your profile and preferences are complete, the system can start generating matches</li>
+                    <li>You'll then have full access to all features: viewing matches, messaging, and managing your account</li>
+                </ol>
+            </section>
+
+            <!-- For Clients -->
+            <section id="for-clients" class="mb-5">
+                <h2>For Clients: Finding and Managing Volunteers</h2>
+
+                <h3>Complete Your Client Profile</h3>
+                <p><strong>To set up your profile:</strong></p>
+                <ol>
+                    <li>Click on <strong>Dashboard</strong> in the main menu</li>
+                    <li>Select <strong>"Edit Profile"</strong></li>
+                    <li>Enter your personal information:
+                        <ul>
+                            <li><strong>First Name & Surname:</strong> Your full name (e.g., "Sarah" and "Johnson")</li>
+                            <li><strong>Gender:</strong> Select your gender (Male, Female, Other, or Prefer not to say)</li>
+                            <li><strong>Date of Birth:</strong> Your date of birth</li>
+                            <li><strong>Phone Number:</strong> Contact number (e.g., "01234 567890")</li>
+                        </ul>
+                    </li>
+                    <li>Enter your address details:
+                        <ul>
+                            <li><strong>Address Line 1:</strong> Main street address (e.g., "42 Oak Street")</li>
+                            <li><strong>Address Line 2:</strong> Secondary address line (optional, e.g., flat number)</li>
+                            <li><strong>City:</strong> Your city (e.g., "Aberdeen")</li>
+                            <li><strong>Postcode:</strong> Your UK postcode (e.g., "AB24 1QQ")</li>
+                        </ul>
+                    </li>
+                    <li>Add emergency contact details:
+                        <ul>
+                            <li><strong>Emergency Contact Name:</strong> Name of the person to contact in emergency</li>
+                            <li><strong>Emergency Contact Phone:</strong> Their phone number</li>
+                            <li><strong>Relationship:</strong> Their relationship to you (e.g., "Family", "Friend", "Carer")</li>
+                        </ul>
+                    </li>
+                    <li>Add optional information:
+                        <ul>
+                            <li><strong>Profile Photo:</strong> Upload a clear photo of yourself</li>
+                            <li><strong>Additional Notes:</strong> Any information volunteers should know (optional)</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Save Profile"</strong></li>
+                </ol>
+
+                <h3 class="mt-4">Set Your Preferences</h3>
+                <p><strong>To tell the system what kind of volunteer you need:</strong></p>
+                <ol>
+                    <li>From your Dashboard, click <strong>"Set Preferences"</strong></li>
+                    <li>Select your language preferences:
+                        <ul>
+                            <li><strong>Preferred Languages:</strong> Check all languages you're comfortable with (English, Spanish, French, German, Chinese, Arabic, Hindi, Russian, Portuguese, or Other)</li>
+                            <li>Example: You select English and Polish if you speak both</li>
+                        </ul>
+                    </li>
+                    <li>Select your availability:
+                        <ul>
+                            <li><strong>Preferred Days:</strong> Check the days when you need help (Monday through Sunday)</li>
+                            <li>Example: You need help on Monday, Wednesday, and Friday</li>
+                            <li><strong>Preferred Times:</strong> Select time slots that work for you:
+                                <ul>
+                                    <li>Morning (8:00 - 11:00)</li>
+                                    <li>Midday (11:00 - 14:00)</li>
+                                    <li>Afternoon (14:00 - 17:00)</li>
+                                </ul>
+                            </li>
+                            <li>Example: You prefer afternoon visits</li>
+                        </ul>
+                    </li>
+                    <li>Specify the tasks and services you need:
+                        <ul>
+                            <li><strong>Preferred Tasks:</strong> Check all tasks you need help with:</li>
+                            <li>Meal preparation, Shopping assistance, Housekeeping, Laundry assistance, Gardening, Pet care, Child care, Transport assistance, Technology assistance, or Reading aloud</li>
+                            <li>Example: You need help with shopping and meal preparation</li>
+                        </ul>
+                    </li>
+                    <li>Add other preferences:
+                        <ul>
+                            <li><strong>Preferred Gender:</strong> Do you have a preference for volunteer gender? (Optional)</li>
+                            <li><strong>Preferred Location:</strong> Any specific meeting location preferences? (Optional, defaults to your home address)</li>
+                            <li><strong>Do you have pets?:</strong> Check if you have pets in your home</li>
+                            <li><strong>Additional Notes:</strong> Any special requirements or preferences (optional)</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Save Preferences"</strong></li>
+                </ol>
+
+                <h3 class="mt-4">Browse and Request Volunteers</h3>
+                <p><strong>To find suitable volunteers:</strong></p>
+                <ol>
+                    <li>Click <strong>"Matched Volunteers"</strong> in the dashboard or main menu</li>
+                    <li>The system automatically generates a list of the best matching volunteers based on your preferences</li>
+                    <li>You'll see a list sorted by compatibility score (highest matches first)
+                        <ul>
+                            <li>Each volunteer shows their name and compatibility percentage</li>
+                            <li>The percentage (0-100%) shows how well they match your needs</li>
+                            <li>Scores above 80% are usually excellent matches</li>
+                        </ul>
+                    </li>
+                    <li>Review a volunteer by clicking <strong>"View Details"</strong> to see:
+                        <ul>
+                            <li>Their complete profile (photo, bio, skills)</li>
+                            <li>Their availability (days and times)</li>
+                            <li>The compatibility breakdown showing why they match you</li>
+                        </ul>
+                    </li>
+                    <li>If interested in working with them, click <strong>"Send Request"</strong></li>
+                    <li>The volunteer will see your request in their "Matched Clients" list and can accept or decline</li>
+                    <li>You'll see the request status update as they respond</li>
+                </ol>
+
+                <h3 class="mt-4">Track Your Match Requests</h3>
+                <p><strong>To see the status of your requests:</strong></p>
+                <ol>
+                    <li>Click <strong>"Matched Volunteers"</strong> to view all your requests</li>
+                    <li>Each volunteer's card shows their current status:
+                        <ul>
+                            <li><strong>Pending</strong> - Request hasn't been sent yet (no action taken)</li>
+                            <li><strong>Suggested</strong> - Your request has been sent, waiting for volunteer response</li>
+                            <li><strong>Accepted</strong> - Volunteer has accepted your request! You can now message them</li>
+                            <li><strong>Active</strong> - Match is currently active and support is ongoing</li>
+                        </ul>
+                    </li>
+                    <li>Click on any volunteer to view or manage the match</li>
+                </ol>
+            </section>
+
+            <!-- For Volunteers -->
+            <section id="for-volunteers" class="mb-5">
+                <h2>For Volunteers: Setting Up and Accepting Matches</h2>
+
+                <h3>Complete Your Volunteer Profile</h3>
+                <p><strong>To show clients what you can offer:</strong></p>
+                <ol>
+                    <li>Click on <strong>Dashboard</strong> in the main menu</li>
+                    <li>Select <strong>"Edit Profile"</strong></li>
+                    <li>Enter your personal information:
+                        <ul>
+                            <li><strong>First Name & Surname:</strong> Your full name (e.g., "John" and "Smith")</li>
+                            <li><strong>Gender:</strong> Select your gender (Male, Female, Other, or Prefer not to say)</li>
+                            <li><strong>Date of Birth:</strong> Your date of birth</li>
+                            <li><strong>Phone Number:</strong> Your contact number (optional, e.g., "01234 567890")</li>
+                        </ul>
+                    </li>
+                    <li>Enter your address details:
+                        <ul>
+                            <li><strong>Address Line 1:</strong> Main street address (e.g., "15 Garden Lane")</li>
+                            <li><strong>Address Line 2:</strong> Secondary address line (optional)</li>
+                            <li><strong>City:</strong> Your city (e.g., "Aberdeen")</li>
+                            <li><strong>Postcode:</strong> Your UK postcode (e.g., "AB24 1QQ")</li>
+                        </ul>
+                    </li>
+                    <li>Add emergency contact details:
+                        <ul>
+                            <li><strong>Emergency Contact Name:</strong> Name of person to contact in emergency</li>
+                            <li><strong>Emergency Contact Phone:</strong> Their phone number</li>
+                            <li><strong>Relationship:</strong> Your relationship to them (e.g., "Family", "Friend")</li>
+                        </ul>
+                    </li>
+                    <li>Add professional information:
+                        <ul>
+                            <li><strong>About You (Bio):</strong> Tell clients about yourself and why you want to volunteer (e.g., "I have 5 years of experience helping elderly people")</li>
+                            <li><strong>Skills & Experience:</strong> Describe your relevant skills and experience (e.g., "Trained in first aid, experience with gardening and technology support")</li>
+                        </ul>
+                    </li>
+                    <li>Add optional information:
+                        <ul>
+                            <li><strong>Profile Photo:</strong> Upload a clear, professional photo of yourself</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Save Profile"</strong></li>
+                </ol>
+
+                <h3 class="mt-4">Set Your Availability</h3>
+                <p><strong>To tell clients when you can help:</strong></p>
+                <ol>
+                    <li>From your Dashboard, click <strong>"Set Preferences"</strong></li>
+                    <li>Select your language capabilities:
+                        <ul>
+                            <li><strong>Preferred Languages:</strong> Check all languages you speak (English, Spanish, French, German, Chinese, Arabic, Hindi, Russian, Portuguese, or Other)</li>
+                            <li>Example: You select English and French</li>
+                        </ul>
+                    </li>
+                    <li>Select your availability:
+                        <ul>
+                            <li><strong>Preferred Days:</strong> Check all days you're available (Monday through Sunday)</li>
+                            <li>Example: You're available Tuesday, Thursday, and Saturday</li>
+                            <li><strong>Preferred Times:</strong> Select time slots you prefer to work:
+                                <ul>
+                                    <li>Morning (8:00 - 11:00)</li>
+                                    <li>Midday (11:00 - 14:00)</li>
+                                    <li>Afternoon (14:00 - 17:00)</li>
+                                </ul>
+                            </li>
+                            <li>Example: You prefer morning and afternoon slots</li>
+                        </ul>
+                    </li>
+                    <li>Specify the tasks and services you can help with:
+                        <ul>
+                            <li><strong>Preferred Tasks:</strong> Check all tasks you're willing to help with:</li>
+                            <li>Meal preparation, Shopping assistance, Housekeeping, Laundry assistance, Gardening, Pet care, Child care, Transport assistance, Technology assistance, or Reading aloud</li>
+                            <li>Example: You can help with gardening, shopping, and technology support</li>
+                        </ul>
+                    </li>
+                    <li>Add other qualifications and information:
+                        <ul>
+                            <li><strong>Preferred Client Gender:</strong> Any preference for client gender? (Optional)</li>
+                            <li><strong>Can work with pets?:</strong> Check if you're comfortable around pets</li>
+                            <li><strong>Have transportation?:</strong> Check if you have your own vehicle for transport assistance tasks</li>
+                            <li><strong>Availability Notes:</strong> Any specific restrictions or important information (optional, e.g., "Available with 24 hours notice")</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Save Preferences"</strong></li>
+                </ol>
+
+                <h3 class="mt-4">Review and Accept Match Requests</h3>
+                <p><strong>When a client sends you a request:</strong></p>
+                <ol>
+                    <li>Click <strong>"Matched Clients"</strong> in the dashboard or main menu</li>
+                    <li>You'll see clients who have sent you match requests, sorted by compatibility score</li>
+                    <li>Each client shows their name and compatibility percentage
+                        <ul>
+                            <li>Click <strong>"View Details"</strong> to learn about the client</li>
+                            <li>Review their profile (photo, additional notes, location)</li>
+                            <li>Check their tasks and preferences to see how you can help</li>
+                            <li>View the compatibility breakdown to see why they were matched with you</li>
+                        </ul>
+                    </li>
+                    <li>After reviewing, click <strong>"Respond"</strong> to make a decision</li>
+                    <li>Choose your response:
+                        <ul>
+                            <li>Click <strong>"Accept"</strong> if you want to work with this client</li>
+                            <li>Click <strong>"Decline"</strong> if you're not the right fit</li>
+                        </ul>
+                    </li>
+                    <li>Once you accept:
+                        <ul>
+                            <li>The match becomes "Accepted"</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3 class="mt-4">Track Your Active Matches</h3>
+                <p><strong>To manage your ongoing matches:</strong></p>
+                <ol>
+                    <li>Click <strong>"Matched Clients"</strong></li>
+                    <li>You'll see all your matches with their current status:
+                        <ul>
+                            <li><strong>Suggested</strong> - Client has requested you, waiting for your response</li>
+                            <li><strong>Accepted</strong> - You've both agreed to work together</li>
+                            <li><strong>Active</strong> - You're currently providing support</li>
+                            <li><strong>Completed</strong> - The match has been completed</li>
+                        </ul>
+                    </li>
+                    <li>Click on any match to view details or manage the arrangement</li>
+                </ol>
+            </section>
+
+            <!-- Account Management -->
+            <section id="account" class="mb-5">
+                <h2>Account Management</h2>
+                
+                <h3 class="mt-4">Delete Your Account</h3>
+                <p><strong>To permanently delete your account:</strong></p>
+                <ol>
+                    <li>From your Dashboard, look for the <strong>"Delete Account"</strong> option in the menu or settings area</li>
+                    <li>Click <strong>"Delete Account"</strong></li>
+                    <li>You'll be taken to a confirmation page</li>
+                    <li>Click <strong>"Delete"</strong> to confirm</li>
+                    <li><strong>Warning:</strong> This action is permanent and cannot be undone</li>
+                    <li>Your profile, messages, and all account data will be permanently deleted</li>
+                    <li>You'll be logged out after deletion</li>
+                </ol>
+            </section>
+
+            <!-- Tips and Best Practices -->
+            <section id="tips" class="mb-5">
+                <h2>Tips for Success</h2>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>For Clients</h4>
+                        <ul>
+                            <li>Complete your profile fully - better information = better matches</li>
+                            <li>Be specific about tasks and preferences</li>
+                            <li>Check the compatibility score - score 80%+ is usually a good match</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>For Volunteers</h4>
+                        <ul>
+                            <li>Provide a clear, recent profile photo</li>
+                            <li>Be honest about your skills and experience</li>
+                            <li>Set realistic availability - only include times you can commit to</li>
+                            <li>Respond to clients quickly</li>
+                            <li>Keep clients updated about any changes to your availability</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Support -->
+            <section class="alert alert-info">
+                <h4>Need More Help?</h4>
+                <p class="mb-0">If you have questions not covered in this guide, please visit our <a href="{% url 'contact' %}"><strong>Contact page</strong></a> to reach our support team.</p>
+            </section>
+        </div>
+    </div>
+</div>
+
+<style>
+    #overview h1 {
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    section h2 {
+        font-weight: 600;
+        color: #ffffff;
+        padding-bottom: 10px;
+        margin-top: 2rem;
+    }
+    
+    section h3 {
+        font-weight: 500;
+        color: #1e293b;
+        margin-top: 1.5rem;
+    }
+    
+    section h4 {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .accordion-button {
+        font-size: 1.125rem;
+        font-weight: 500;
+        background-color: transparent;
+        color: #ffffff;
+        box-shadow: none;
+        border: none;
+    }
+    
+    .list-group-item.active {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    
+    ol, ul {
+        padding-left: 1.5rem;
+        line-height: 1.8;
+    }
+    
+    code {
+        background-color: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        color: #d63384;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: transparent;
+        color: #ffffff;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+
+{% block title %}Volunteer Login - Shallion Dementia Support{% endblock %}
+
+{% block nav_links %}
+<a href="{% url 'home' %}">Home</a>
+<a href="{% url 'about' %}">About</a>
+<a href="{% url 'how_it_works' %}">How It Works</a>
+<a href="{% url 'contact' %}">Contact</a>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-container {
+        background: linear-gradient(135deg, #8B3A2A 0%, #7a3224 100%);
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    
+    .auth-box {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        animation: slideUp 0.5s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-header h2 {
+        color: black;
+        font-size: 28px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    
+    .auth-header p {
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+    
+    .tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    }
+
+    .tab-btn:hover {
+    background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+    background: #8B3A2A;
+    color: white;
+    }
+
+    .tabs a.tab-btn {
+    border: none;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #8B3A2A;
+        box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.2);
+    }
+    
+    .forgot-password {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+    
+    .forgot-password a {
+        color: #8B3A2A;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+    
+    .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    .btn-primary {
+        background: #8B3A2A;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #7a3224;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+    
+    .btn-outline {
+        background: white;
+        color: #2c3e50;
+        border: 2px solid #e0e0e0;
+        margin-top: 10px;
+    }
+    
+    .btn-outline:hover {
+        background: #8B3A2A;
+        border-color: #8B3A2A;
+    }
+    
+    .auth-switch {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .auth-switch a {
+        color: #8B3A2A;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .auth-switch a:hover {
+        text-decoration: underline;
+    }
+    
+    .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+    
+    .form-control.error {
+        border-color: #e74c3c;
+    }
+    
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        animation: slideIn 0.3s ease;
+    }
+    
+    .alert-error {
+        background: #fff5f5;
+        border: 2px solid #e74c3c;
+        color: #e74c3c;
+    }
+    
+    .alert-success {
+        background: #f0fff4;
+        border: 2px solid #27ae60;
+        color: #27ae60;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Volunteer Registration & Login</h2>
+            <p>Access your volunteer account</p>
+        </div>
+        
+           
+        <div class="tabs">
+            <a href="{% url 'accounts:volunteer_login' %}" 
+                class="tab-btn {% if request.resolver_match.url_name == 'volunteer_login' %}active{% endif %}">
+                Login
+            </a>
+
+            <a href="{% url 'accounts:volunteer_register' %}" 
+                class="tab-btn {% if request.resolver_match.url_name == 'volunteer_register' %}active{% endif %}">
+                Register
+            </a>
+        </div>
+        
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="POST" id="login-form">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-error show">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_username">Email:</label>
+                <input type="email" 
+                       name="username" 
+                       id="id_username" 
+                       class="form-control {% if form.username.errors %}error{% endif %}" 
+                       placeholder="Enter your email" 
+                       required
+                       value="{{ form.username.value|default:'' }}">
+                {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" 
+                       name="password" 
+                       id="id_password" 
+                       class="form-control {% if form.password.errors %}error{% endif %}" 
+                       placeholder="Enter your password" 
+                       required>
+                {% if form.password.errors %}
+                <div class="error-message">{{ form.password.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="forgot-password">
+                <a href="{% url 'accounts:password_reset' %}">Forgot Password?</a>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
+            </div>
+                  
+        </form>      
+      
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Update active tab
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show/hide forms
+            if (this.dataset.tab === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        });
+    });
+    
+    // Form validation
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('id_username');
+    const passwordInput = document.getElementById('id_password');
+    
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function showError(input, message) {
+        input.classList.add('error');
+        let errorDiv = input.parentNode.querySelector('.error-message');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            input.parentNode.appendChild(errorDiv);
+        }
+        errorDiv.textContent = message;
+    }
+    
+    function clearError(input) {
+        input.classList.remove('error');
+        const errorDiv = input.parentNode.querySelector('.error-message');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+    }
+    
+    emailInput.addEventListener('blur', function() {
+        clearError(this);
+        if (!this.value.trim()) {
+            showError(this, 'Email is required');
+        } else if (!validateEmail(this.value)) {
+            showError(this, 'Please enter a valid email address');
+        }
+    });
+    
+    passwordInput.addEventListener('blur', function() {
+        clearError(this);
+        if (!this.value.trim()) {
+            showError(this, 'Password is required');
+        }
+    });
+    
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        clearError(emailInput);
+        clearError(passwordInput);
+        
+        if (!emailInput.value.trim()) {
+            showError(emailInput, 'Email is required');
+            isValid = false;
+        } else if (!validateEmail(emailInput.value)) {
+            showError(emailInput, 'Please enter a valid email address');
+            isValid = false;
+        }
+        
+        if (!passwordInput.value.trim()) {
+            showError(passwordInput, 'Password is required');
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

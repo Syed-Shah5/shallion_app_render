@@ -1,0 +1,462 @@
+{% extends 'client/base_client.html' %}
+{% load static %}
+
+{% block page_title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control.error,
+    .form-select.error {
+        border-color: #dc3545 !important;
+        background-color: #fff5f5 !important;
+    }
+
+    .error-message {
+        color: #dc3545 !important;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-edit me-2"></i>{{ page_title }}
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Profile Photo -->
+                    <h5 class="mb-3">Profile Photo</h5>
+                    <div class="text-center mb-4">
+                        <div id="photoPreviewContainer">
+                            {% if profile and profile.profile_photo %}
+                                <img src="{{ profile.profile_photo.url }}" 
+                                     id="photoPreview" 
+                                     class="profile-photo mb-3" 
+                                     alt="Profile photo">
+                            {% else %}
+                                <div class="profile-photo-placeholder mx-auto mb-3" id="photoPlaceholder">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="photo-upload-area" onclick="document.getElementById('{{ form.profile_photo.id_for_label }}').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p class="mb-1">Click to upload a profile photo</p>
+                            <p class="small text-muted">JPEG, PNG, or GIF (Max 5MB)</p>
+                        </div>
+                        <div class="d-none">
+                            {{ form.profile_photo }}
+                        </div>
+                        {% if form.profile_photo.errors %}
+                            <div class="text-danger small mt-2">{{ form.profile_photo.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Personal Information -->
+                    <h5 class="mb-3">Personal Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.forename.id_for_label }}" class="form-label">
+                                Forename <span class="text-danger">*</span>
+                            </label>
+                            {{ form.forename }}
+                            {% if form.forename.errors %}
+                                <div class="text-danger small">{{ form.forename.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.surname.id_for_label }}" class="form-label">
+                                Surname <span class="text-danger">*</span>
+                            </label>
+                            {{ form.surname }}
+                            {% if form.surname.errors %}
+                                <div class="text-danger small">{{ form.surname.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.gender.id_for_label }}" class="form-label">
+                                Gender <span class="text-danger">*</span>
+                            </label>
+                            {{ form.gender }}
+                            {% if form.gender.errors %}
+                                <div class="text-danger small">{{ form.gender.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">
+                                Date of Birth <span class="text-danger">*</span>
+                            </label>
+                            {{ form.date_of_birth }}
+                            {% if form.date_of_birth.errors %}
+                                <div class="text-danger small">{{ form.date_of_birth.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.phone.id_for_label }}" class="form-label">
+                            Phone Number
+                        </label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="text-danger small">{{ form.phone.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Format: 07911 123456 or +447911 123456</div>
+                    </div>
+                    
+                    <!-- Address -->
+                    <h5 class="mb-3 mt-4">Address</h5>
+                    <div class="mb-3">
+                        <label for="{{ form.address_line1.id_for_label }}" class="form-label">
+                            Address Line 1 <span class="text-danger">*</span>
+                        </label>
+                        {{ form.address_line1 }}
+                        {% if form.address_line1.errors %}
+                            <div class="text-danger small">{{ form.address_line1.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.address_line2.id_for_label }}" class="form-label">
+                            Address Line 2
+                        </label>
+                        {{ form.address_line2 }}
+                        {% if form.address_line2.errors %}
+                            <div class="text-danger small">{{ form.address_line2.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">
+                                City <span class="text-danger">*</span>
+                            </label>
+                            {{ form.city }}
+                            {% if form.city.errors %}
+                                <div class="text-danger small">{{ form.city.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.postcode.id_for_label }}" class="form-label">
+                                Postcode <span class="text-danger">*</span>
+                            </label>
+                            {{ form.postcode }}
+                            {% if form.postcode.errors %}
+                                <div class="text-danger small">{{ form.postcode.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">UK postcode, e.g. SW1A 1AA</div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Contact -->
+                    <h5 class="mb-3 mt-4">Emergency Contact</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.emergency_contact_name.id_for_label }}" class="form-label">
+                                Contact Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.emergency_contact_name }}
+                            {% if form.emergency_contact_name.errors %}
+                                <div class="text-danger small">{{ form.emergency_contact_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.emergency_contact_relationship.id_for_label }}" class="form-label">
+                                Relationship <span class="text-danger">*</span>
+                            </label>
+                            {{ form.emergency_contact_relationship }}
+                            {% if form.emergency_contact_relationship.errors %}
+                                <div class="text-danger small">{{ form.emergency_contact_relationship.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.emergency_contact_phone.id_for_label }}" class="form-label">
+                            Emergency Contact Phone <span class="text-danger">*</span>
+                        </label>
+                        {{ form.emergency_contact_phone }}
+                        {% if form.emergency_contact_phone.errors %}
+                            <div class="text-danger small">{{ form.emergency_contact_phone.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Format: 07911 123456 or +447911 123456</div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <h5 class="mb-3 mt-4">Additional Information</h5>
+                    <div class="mb-3">
+                        <label for="{{ form.additional_notes.id_for_label }}" class="form-label">
+                            Additional Notes
+                        </label>
+                        {{ form.additional_notes }}
+                        {% if form.additional_notes.errors %}
+                            <div class="text-danger small">{{ form.additional_notes.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Any information you'd like volunteers to know about you or your situation.
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            {% if profile %}Update Profile{% else %}Save and Continue{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var photoInput = document.getElementById('{{ form.profile_photo.id_for_label }}');
+    var previewContainer = document.getElementById('photoPreviewContainer');
+
+    if (!photoInput || !previewContainer) return;
+
+    photoInput.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+        }
+
+        // ── Show preview immediately ──
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var existingPreview = document.getElementById('photoPreview');
+            if (existingPreview) {
+                existingPreview.src = e.target.result;
+            } else {
+                var img = document.createElement('img');
+                img.id = 'photoPreview';
+                img.className = 'profile-photo mb-3';
+                img.src = e.target.result;
+                img.alt = 'Profile photo preview';
+                var placeholder = document.getElementById('photoPlaceholder');
+                if (placeholder) placeholder.remove();
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(img);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+    // ── Regex patterns ───────────────────────────────────────────────
+    var NAME_RE     = /^[A-Za-z][A-Za-z\s'\-]{1,49}$/;
+    var PHONE_RE    = /^(\+44\s?|0)[1-9](\d\s?){8,9}\d$/;
+    var POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
+
+    // ── Helpers ──────────────────────────────────────────────────────
+    function showError(input, message) {
+        input.classList.add('error');
+        var errorDiv = input.parentNode.querySelector('.error-message');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            input.parentNode.appendChild(errorDiv);
+        }
+        errorDiv.textContent = message;
+    }
+
+    function clearError(input) {
+        input.classList.remove('error');
+        var errorDiv = input.parentNode.querySelector('.error-message');
+        if (errorDiv) errorDiv.remove();
+    }
+
+    // ── Field references ─────────────────────────────────────────────
+    var forenameInput  = document.getElementById('{{ form.forename.id_for_label }}');
+    var surnameInput   = document.getElementById('{{ form.surname.id_for_label }}');
+    var genderInput    = document.getElementById('{{ form.gender.id_for_label }}');
+    var dobInput       = document.getElementById('{{ form.date_of_birth.id_for_label }}');
+    var phoneInput     = document.getElementById('{{ form.phone.id_for_label }}');
+    var addr1Input     = document.getElementById('{{ form.address_line1.id_for_label }}');
+    var cityInput      = document.getElementById('{{ form.city.id_for_label }}');
+    var postcodeInput  = document.getElementById('{{ form.postcode.id_for_label }}');
+    var ecNameInput    = document.getElementById('{{ form.emergency_contact_name.id_for_label }}');
+    var ecRelInput     = document.getElementById('{{ form.emergency_contact_relationship.id_for_label }}');
+    var ecPhoneInput   = document.getElementById('{{ form.emergency_contact_phone.id_for_label }}');
+
+    // ── Validate functions ───────────────────────────────────────────
+    function validateForename() {
+        clearError(forenameInput);
+        var v = forenameInput.value.trim();
+        if (!v)               { showError(forenameInput, 'First name is required.'); return false; }
+        if (v.length < 2)     { showError(forenameInput, 'First name must be at least 2 characters.'); return false; }
+        if (!NAME_RE.test(v)) { showError(forenameInput, 'Only letters, spaces, hyphens, and apostrophes allowed.'); return false; }
+        return true;
+    }
+
+    function validateSurname() {
+        clearError(surnameInput);
+        var v = surnameInput.value.trim();
+        if (!v)               { showError(surnameInput, 'Last name is required.'); return false; }
+        if (v.length < 2)     { showError(surnameInput, 'Last name must be at least 2 characters.'); return false; }
+        if (!NAME_RE.test(v)) { showError(surnameInput, 'Only letters, spaces, hyphens, and apostrophes allowed.'); return false; }
+        return true;
+    }
+
+    function validateGender() {
+        clearError(genderInput);
+        if (!genderInput.value) { showError(genderInput, 'Please select a gender.'); return false; }
+        return true;
+    }
+
+    function validateDob() {
+        clearError(dobInput);
+        if (!dobInput.value) { showError(dobInput, 'Date of birth is required.'); return false; }
+        var dob = new Date(dobInput.value), today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (dob > today) { showError(dobInput, 'Date of birth cannot be in the future.'); return false; }
+        var age = today.getFullYear() - dob.getFullYear();
+        var mo  = today.getMonth() - dob.getMonth();
+        if (mo < 0 || (mo === 0 && today.getDate() < dob.getDate())) age--;
+        if (age < 18)  { showError(dobInput, 'Client must be at least 18 years old.'); return false; }
+        if (age > 120) { showError(dobInput, 'Please enter a valid date of birth.'); return false; }
+        return true;
+    }
+
+    function validatePhone() {
+        clearError(phoneInput);
+        var v = phoneInput.value.trim();
+        if (!v)                { showError(phoneInput, 'Phone number is required.'); return false; }
+        if (!PHONE_RE.test(v)) { showError(phoneInput, 'Enter a valid UK phone number (e.g. 07911 123456 or +447911 123456).'); return false; }
+        return true;
+    }
+
+    function validateAddr1() {
+        clearError(addr1Input);
+        if (!addr1Input.value.trim()) { showError(addr1Input, 'Address line 1 is required.'); return false; }
+        return true;
+    }
+
+    function validateCity() {
+        clearError(cityInput);
+        var v = cityInput.value.trim();
+        if (!v)           { showError(cityInput, 'City is required.'); return false; }
+        if (v.length < 2) { showError(cityInput, 'City name must be at least 2 characters.'); return false; }
+        if (!/^[A-Za-z][A-Za-z\s'\-]{0,99}$/.test(v)) { showError(cityInput, 'City may only contain letters, spaces, and hyphens.'); return false; }
+        return true;
+    }
+
+    function validatePostcode() {
+        clearError(postcodeInput);
+        var v = postcodeInput.value.trim();
+        if (!v)                   { showError(postcodeInput, 'Postcode is required.'); return false; }
+        if (!POSTCODE_RE.test(v)) { showError(postcodeInput, 'Enter a valid UK postcode (e.g. SW1A 1AA).'); return false; }
+        return true;
+    }
+
+    function validateEcName() {
+        clearError(ecNameInput);
+        var v = ecNameInput.value.trim();
+        if (!v)               { showError(ecNameInput, 'Emergency contact name is required.'); return false; }
+        if (v.length < 2)     { showError(ecNameInput, 'Must be at least 2 characters.'); return false; }
+        if (!NAME_RE.test(v)) { showError(ecNameInput, 'Only letters, spaces, hyphens, and apostrophes allowed.'); return false; }
+        return true;
+    }
+
+    function validateEcRel() {
+        clearError(ecRelInput);
+        if (!ecRelInput.value.trim()) { showError(ecRelInput, 'Relationship is required.'); return false; }
+        return true;
+    }
+
+    function validateEcPhone() {
+        clearError(ecPhoneInput);
+        var v = ecPhoneInput.value.trim();
+        if (!v)                { showError(ecPhoneInput, 'Emergency contact phone is required.'); return false; }
+        if (!PHONE_RE.test(v)) { showError(ecPhoneInput, 'Enter a valid UK phone number (e.g. 07911 123456 or +447911 123456).'); return false; }
+        return true;
+    }
+
+    // ── Real-time blur listeners ──────────────────────────────────────
+    if (forenameInput)  forenameInput.addEventListener('blur',  validateForename);
+    if (surnameInput)   surnameInput.addEventListener('blur',   validateSurname);
+    if (genderInput)    genderInput.addEventListener('blur',    validateGender);
+    if (dobInput)       dobInput.addEventListener('blur',       validateDob);
+    if (phoneInput)     phoneInput.addEventListener('blur',     validatePhone);
+    if (addr1Input)     addr1Input.addEventListener('blur',     validateAddr1);
+    if (cityInput)      cityInput.addEventListener('blur',      validateCity);
+    if (postcodeInput)  postcodeInput.addEventListener('blur',  validatePostcode);
+    if (ecNameInput)    ecNameInput.addEventListener('blur',    validateEcName);
+    if (ecRelInput)     ecRelInput.addEventListener('blur',     validateEcRel);
+    if (ecPhoneInput)   ecPhoneInput.addEventListener('blur',   validateEcPhone);
+
+    // ── Photo — validate on change ───────────────────────────────────
+    if (photoInput) {
+        photoInput.addEventListener('change', function() {
+            clearError(photoInput);
+            if (photoInput.files && photoInput.files[0]) {
+                var file = photoInput.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    showError(photoInput, 'Profile photo must be less than 5MB.');
+                } else if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+                    showError(photoInput, 'Please upload a JPEG, PNG, or GIF image.');
+                }
+            }
+        });
+    }
+
+    // ── Submit ───────────────────────────────────────────────────────
+    document.querySelector('form').addEventListener('submit', function(e) {
+        var isValid = true;
+
+        if (!validateForename())  isValid = false;
+        if (!validateSurname())   isValid = false;
+        if (!validateGender())    isValid = false;
+        if (!validateDob())       isValid = false;
+        if (!validatePhone())     isValid = false;
+        if (!validateAddr1())     isValid = false;
+        if (!validateCity())      isValid = false;
+        if (!validatePostcode())  isValid = false;
+        if (!validateEcName())    isValid = false;
+        if (!validateEcRel())     isValid = false;
+        if (!validateEcPhone())   isValid = false;
+
+        if (photoInput && photoInput.files && photoInput.files[0]) {
+            clearError(photoInput);
+            var file = photoInput.files[0];
+            if (file.size > 5 * 1024 * 1024) {
+                showError(photoInput, 'Profile photo must be less than 5MB.'); isValid = false;
+            } else if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+                showError(photoInput, 'Please upload a JPEG, PNG, or GIF image.'); isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            var first = document.querySelector('.error');
+            if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+</script>
+{% endblock %}

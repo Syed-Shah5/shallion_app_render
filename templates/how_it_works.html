@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% block title %}How It Works — Shallion{% endblock %}
+
+{% block nav_links %}
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/contact/">Contact</a>
+<a href="/help/">Help</a>
+
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  main { display: block; padding: 0; background: #8B3A2A; color: #fff; }
+
+  /* ── Hero ── */
+  .hiw-hero {
+    text-align: center; padding: 4rem 1.5rem 3rem;
+    background: linear-gradient(135deg, #6b2e22 0%, #8B3A2A 100%);
+    color: #fff;
+  }
+  .hiw-hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: .5rem; }
+  .hiw-hero p  { font-size: 1.0625rem; opacity: .88; max-width: 540px; margin: 0 auto; line-height: 1.6; }
+
+  /* ── Role toggle ── */
+  .role-toggle {
+    display: flex; justify-content: center; gap: 0;
+    margin: 2rem auto 0; max-width: 320px;
+    background: var(--clr-bg); border-radius: var(--radius);
+    overflow: hidden; border: 1px solid var(--clr-border);
+  }
+  .role-toggle button {
+    flex: 1; padding: .625rem; font-size: .875rem; font-weight: 600;
+    border: none; cursor: pointer; background: transparent;
+    color: var(--clr-muted); transition: all var(--transition);
+  }
+  .role-toggle button.active { background: var(--clr-primary); color: #fff; }
+
+  /* ── Section wrapper ── */
+  .section {
+    max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 2rem;
+  }
+  .section h2 {
+    text-align: center; font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem;
+  }
+
+  /* ── Timeline steps ── */
+  .timeline { position: relative; padding-left: 2.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: .9375rem; top: 0; bottom: 0;
+    width: 2px; background: var(--clr-border);
+  }
+  .step {
+    position: relative; margin-bottom: 2rem; padding-bottom: .5rem;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    position: absolute; left: -2.5rem; top: 0;
+    width: 1.875rem; height: 1.875rem; border-radius: 50%;
+    background: var(--clr-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 800; z-index: 1;
+  }
+  .step h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: .375rem; }
+  .step p  { font-size: .875rem; color: rgba(255,255,255,.8); line-height: 1.6; }
+  .step-detail {
+    margin-top: .625rem; padding: .75rem 1rem;
+    background: var(--clr-bg); border-radius: var(--radius);
+    border-left: 3px solid var(--clr-primary); font-size: .8125rem;
+    color: var(--clr-text); line-height: 1.5;
+  }
+
+  /* ── FAQ ── */
+  .faq-list { max-width: 680px; margin: 0 auto; }
+  .faq-item {
+    border: 1px solid var(--clr-border); border-radius: var(--radius);
+    margin-bottom: .75rem; overflow: hidden; background: var(--clr-surface);
+  }
+  .faq-q {
+    width: 100%; padding: 1rem 1.25rem; background: none; border: none;
+    text-align: left; font-size: .9375rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; color: var(--clr-text);
+    transition: background var(--transition);
+  }
+  .faq-q:hover { background: var(--clr-bg); }
+  .faq-q .faq-arrow { transition: transform .2s; font-size: .75rem; color: var(--clr-muted); }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-a {
+    display: none; padding: 0 1.25rem 1rem;
+    font-size: .875rem; color: var(--clr-muted); line-height: 1.6;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA ── */
+  .hiw-cta { text-align: center; padding: 3.5rem 1.5rem; }
+  .hiw-cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: .375rem; }
+  .hiw-cta p  { color: rgba(255,255,255,.75); margin-bottom: 1.25rem; }
+  .hiw-cta .btn { width: auto; padding: .75rem 2rem; }
+
+  /* ── Payment Tiers ── */
+  .tiers-section {
+    max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 3rem;
+  }
+  .tiers-section h2 {
+    text-align: center; font-size: 1.5rem; font-weight: 800; margin-bottom: .5rem;
+  }
+  .tiers-intro {
+    text-align: center; color: rgba(255,255,255,.8); font-size: .9375rem;
+    margin-bottom: 2rem; max-width: 560px; margin-left: auto; margin-right: auto;
+  }
+  .tiers-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .tier-card {
+    background: var(--clr-surface); border: 2px solid var(--clr-border);
+    border-radius: var(--radius); padding: 1.75rem 1.5rem;
+    box-shadow: var(--shadow); display: flex; flex-direction: column;
+    color: #1e293b; position: relative;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .tier-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .tier-card.popular {
+    border-color: #8B3A2A;
+  }
+  .popular-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: #8B3A2A; color: #fff;
+    font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    padding: .25rem .875rem; border-radius: 0 0 var(--radius) var(--radius);
+    white-space: nowrap;
+  }
+  .tier-name {
+    font-size: .75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: #8B3A2A; margin-bottom: .5rem;
+  }
+  .tier-price {
+    font-size: 2rem; font-weight: 800; color: #1e293b;
+    margin-bottom: .125rem; line-height: 1;
+  }
+  .tier-price span { font-size: 1rem; font-weight: 500; color: #64748b; }
+  .tier-desc {
+    font-size: .8125rem; color: #64748b; margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+  .tier-features {
+    list-style: none; margin-bottom: 1.5rem; flex: 1;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .tier-features li {
+    display: flex; align-items: flex-start; gap: .5rem;
+    font-size: .8125rem; color: #1e293b; line-height: 1.4;
+  }
+  .tier-features li::before {
+    content: '✓'; flex-shrink: 0; width: 1rem; height: 1rem;
+    background: #f9ece9; color: #8B3A2A;
+    border-radius: 50%; display: inline-flex; align-items: center;
+    justify-content: center; font-size: .625rem; font-weight: 800; margin-top: .1rem;
+  }
+  .tier-note {
+    font-size: .7rem; color: #94a3b8; text-align: center; margin-top: auto;
+    padding-top: .75rem; border-top: 1px solid #e2e8f0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hiw-hero">
+  <h1>How It Works</h1>
+  <p>A simple, step-by-step process to connect you with the right person.</p>
+  <div class="role-toggle">
+    <button class="active" id="toggleClient">For Clients</button>
+    <button id="toggleVolunteer">For Volunteers</button>
+  </div>
+</section>
+
+<!-- Client Steps -->
+<section class="section" id="clientSteps">
+  <h2>Client Journey</h2>
+  <div class="timeline">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Create Your Account</h3>
+      <p>Register as a client with your email and upload a valid GP certificate for review. Your account will be activated once our team verifies your email and GP certificate.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Set Up Your Profile &amp; Preferences</h3>
+      <p>Add your personal details, then set your matching preferences — what kind of help you need, availability, location and more.</p>
+      <div class="step-detail">Your preferences power our matching engine. The more specific you are, the better your matches.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Browse Suggestions</h3>
+      <p>Our smart algorithm suggests volunteers that match your preferences. Review their profiles and scores before sending a request.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Request a Match</h3>
+      <p>Found someone who fits? Send a match request. The volunteer will review and accept or decline.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <h3>Start Communicating</h3>
+      <p>Once matched, use the built-in messaging system to coordinate visits, share details, and stay in touch.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <h3>Rate Your Experience</h3>
+      <p>After the match is completed, leave a rating and feedback covering professionalism, communication, punctuality, and helpfulness.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Volunteer Steps -->
+<section class="section" id="volunteerSteps" style="display:none;">
+  <h2>Volunteer Journey</h2>
+  <div class="timeline">
+    <div class="step">
+      <div class="step-num" style="background:#8B3A2A;">1</div>
+      <h3>Create Your Account</h3>
+      <p>Register as a volunteer with your email and valid PVG (Protecting Vulnerable Groups) number for review. Your account will be activated once our team verifies your email and PVG number.</p>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#8B3A2A;">2</div>
+      <h3>Complete Your Profile</h3>
+      <p>Add your bio, qualifications and set your availability and service preferences so clients can find you.</p>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#8B3A2A;">3</div>
+      <h3>Receive Match Requests</h3>
+      <p>Clients will send you match requests based on compatibility. Review them in your incoming requests page.</p>
+      <div class="step-detail">You can accept or decline. Only accepting creates a live match and opens messaging.</div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#8B3A2A;">4</div>
+      <h3>Communicate with Your Client</h3>
+      <p>Use secure on-platform messaging to coordinate visits, discuss needs and build a working relationship.</p>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#8B3A2A;">5</div>
+      <h3>Build Your Reputation</h3>
+      <p>Receive ratings from clients on professionalism, communication, punctuality and helpfulness. Great ratings lead to more matches.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Tiers -->
+<section class="tiers-section" id="clientTiers">
+  <h2>Client Payment Plans</h2>
+  <p class="tiers-intro">Simple, transparent hourly pricing. Pay only for the time you use.</p>
+  <div class="tiers-grid" style="max-width:640px; margin:0 auto;">
+
+    <!-- Standard -->
+    <div class="tier-card">
+      <div class="tier-name">Standard Rate</div>
+      <div class="tier-price">£10 <span>/ hour</span></div>
+      <p class="tier-desc">Discounted rate for clients who are on a pension with no dependent children.</p>
+      <ul class="tier-features">
+        <li>£10 per hour of volunteer support</li>
+        <li>Available to pensioners with no dependent children</li>
+        <li>Access to matched volunteer pool</li>
+        <li>In-app messaging</li>
+        <li>Post-match ratings</li>
+      </ul>
+      <div class="tier-note">Eligibility verified during registration.</div>
+    </div>
+
+    <!-- Premium -->
+    <div class="tier-card popular">
+      <div class="tier-name">Premium Rate</div>
+      <div class="tier-price">£20 <span>/ hour</span></div>
+      <p class="tier-desc">Full-rate plan available to all clients with no eligibility requirements.</p>
+      <ul class="tier-features">
+        <li>£20 per hour of volunteer support</li>
+        <li>Open to all clients</li>
+        <li>Access to matched volunteer pool</li>
+        <li>In-app messaging</li>
+        <li>Post-match ratings</li>
+      </ul>
+      <div class="tier-note">Pay per session. No monthly commitment.</div>
+    </div>
+
+  </div>
+</section>
+<section class="section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">How does matching work?<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">Our algorithm compares your preferences (skills needed, availability, location) with volunteer profiles. You see ranked suggestions with compatibility scores, and you choose who to request.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Is registration free?<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">Yes, creating an account is free. Service fees are charged hourly: £20/hour at the standard rate, or £10/hour for clients who are on a pension with no dependent children. Eligibility is verified during registration.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Can I cancel or decline a match?<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">Yes. Clients can cancel pending requests. Volunteers can decline incoming requests. Active matches can be completed when the engagement ends naturally.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Is my personal information safe?<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">Absolutely. All accounts are email-verified. Communication happens on-platform. We never share personal details without your consent.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Can I rate my experience?<span class="faq-arrow">▼</span></button>
+      <div class="faq-a">Yes, once a match is completed, both parties can rate each other across four aspects: professionalism, communication, punctuality, and helpfulness, plus an overall score and written feedback.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="hiw-cta">
+  <h2>Ready to Start?</h2>
+  <p>Create your account and experience seamless volunteer matching.</p>
+ 
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const clientBtn = document.getElementById('toggleClient');
+  const volunteerBtn = document.getElementById('toggleVolunteer');
+  const clientSteps = document.getElementById('clientSteps');
+  const volunteerSteps = document.getElementById('volunteerSteps');
+  const clientTiers = document.getElementById('clientTiers');
+
+  clientBtn.addEventListener('click', () => {
+    clientBtn.classList.add('active');
+    volunteerBtn.classList.remove('active');
+    clientSteps.style.display = '';
+    clientTiers.style.display = '';
+    volunteerSteps.style.display = 'none';
+  });
+  volunteerBtn.addEventListener('click', () => {
+    volunteerBtn.classList.add('active');
+    clientBtn.classList.remove('active');
+    volunteerSteps.style.display = '';
+    clientSteps.style.display = 'none';
+    clientTiers.style.display = 'none';
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+{% endblock %}

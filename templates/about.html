@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About — Shallion{% endblock %}
+
+{% block nav_links %}
+<a href="/">Home</a>
+<a href="/how-it-works/">How It Works</a>
+<a href="/contact/">Contact</a>
+<a href="/help/">Help</a>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  main { display: block; padding: 0; background: #8B3A2A; color: #fff; }
+
+  /* ── Hero banner ── */
+  .about-hero {
+    text-align: center; padding: 4rem 1.5rem 3rem;
+    background: linear-gradient(135deg, #6b2e22 0%, #8B3A2A 100%);
+    color: #fff;
+  }
+  .about-hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: .5rem; }
+  .about-hero p  { font-size: 1.0625rem; opacity: .88; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+  /* ── Section wrapper ── */
+  .section {
+    max-width: 780px; margin: 0 auto; padding: 3.5rem 1.5rem;
+  }
+  .section-alt { background: var(--clr-surface); border-top: 1px solid var(--clr-border); border-bottom: 1px solid var(--clr-border); color: #1e293b; }
+  .section-alt p { color: #64748b; }
+  .section h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: .75rem; }
+  .section p  { font-size: .9375rem; color: rgba(255,255,255,.8); line-height: 1.65; margin-bottom: 1rem; }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Mission cards ── */
+  .mission-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap: 1.25rem; margin-top: 1.5rem;
+  }
+  .mission-card {
+    text-align: center; padding: 1.5rem 1.25rem;
+    background: var(--clr-surface); border: 1px solid var(--clr-border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .mc-icon { font-size: 2rem; margin-bottom: .625rem; }
+  .mission-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
+  .mission-card p  { font-size: .8125rem; }
+
+  /* ── Values list ── */
+  .values-list { list-style: none; margin-top: 1rem; }
+  .values-list li {
+    padding: .75rem 0; border-bottom: 1px solid rgba(255,255,255,.2);
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .9375rem; color: #fff;
+  }
+  .values-list li:last-child { border-bottom: none; }
+  .vl-icon {
+    width: 2rem; height: 2rem; flex-shrink: 0; border-radius: 50%;
+    background: #f9ece9; display: flex; align-items: center;
+    justify-content: center; font-size: .875rem;
+  }
+  .vl-text strong { display: block; margin-bottom: .125rem; }
+  .vl-text span   { color: rgba(255,255,255,.7); font-size: .8375rem; }
+
+  /* ── Founder photo (above story) ── */
+  .founder-photo-wrap {
+    text-align: center; padding: 3rem 1.5rem 0;
+    max-width: 780px; margin: 0 auto;
+  }
+  .founder-photo {
+    width: 18rem; height: 18rem; border-radius: 50%; object-fit: cover;
+    border: 5px solid rgba(255,255,255,.35); box-shadow: 0 8px 30px rgba(0,0,0,.3);
+  }
+  .founder-name { margin-top: .875rem; font-size: 1.125rem; font-weight: 800; color: #fff; }
+  .founder-title { font-size: .9rem; color: rgba(255,255,255,.7); margin-top: .125rem; }
+
+  /* ── CTA ── */
+  .about-cta {
+    text-align: center; padding: 3.5rem 1.5rem;
+  }
+  .about-cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: .375rem; }
+  .about-cta p  { color: rgba(255,255,255,.75); margin-bottom: 1.25rem; }
+  .about-cta .btn { width: auto; padding: .75rem 2rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="about-hero">
+  <h1>Shallion Dementia Support</h1>
+  <p>We're on a mission to connect people who need help with volunteers who want to make a difference.</p>
+</section>
+
+<!-- Founder photo -->
+<div class="founder-photo-wrap">
+  <img src="{% static 'images/shallion.jpg' %}" alt="Sarah Hoskin" class="founder-photo">
+  <div class="founder-name">Sarah Hoskin</div>
+  <div class="founder-title">Founder and Managing Director</div>
+</div>
+
+<!-- Our Story -->
+<section class="section" style="text-align:justify;">
+  <h2>Our Story</h2>
+  <p>Shallion Support was founded with a deep understanding of the challenges faced by individuals managing Chronic illnesses like M.E., Long Covid, Fibromyalgia, and PTSD. Our mission is to provide practical, compassionate support to help people who are physically unable to manage their daily tasks.</p>
+  <p>The inspiration for Shallion Support comes from a personal journey. At 19, I developed M.E. after a bad reaction to injections for a trip to Malaysia, leaving me with debilitating fatigue for 8 years. After 25 years free of the condition, a family trauma triggered another autoimmune disorder—Cutaneous Lupus—which brought a severe rash, swelling, fatigue, and brain fog. During that difficult time, the support I received from family and friends was vital in helping me cope.</p>
+  <p>Shallion Support exists to ensure no-one has to go through such experiences alone. We offer bespoke, non-medical support to help individuals manage their daily life. Whether it's assisting with daily tasks, helping families with children's homework, preparing meals, organising a grocery shop, or simply being there, <strong>we are committed to making a difference where it matters most.</strong></p>
+</section>
+
+<!-- Mission -->
+<section class="section section-alt">
+  <h2>Our Mission</h2>
+  <p>To make volunteer support accessible, transparent, and rewarding for everyone involved.</p>
+  <div class="mission-grid">
+    <div class="mission-card">
+      <div class="mc-icon">🎯</div>
+      <h3>Accessibility</h3>
+      <p>Everyone deserves access to quality volunteer support, regardless of location or background.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mc-icon">🤝</div>
+      <h3>Trust</h3>
+      <p>Verified accounts, ratings, and transparent payments build confidence between clients and volunteers.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mc-icon">⚡</div>
+      <h3>Simplicity</h3>
+      <p>From matching to messaging to payment — everything is streamlined into a single, intuitive platform.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="section">
+  <h2>What We Value</h2>
+  <ul class="values-list">
+    <li>
+      <div class="vl-icon">🔒</div>
+      <div class="vl-text"><strong>Privacy First</strong><span>Personal information is never shared without consent. Communication stays on-platform until both parties are ready.</span></div>
+    </li>
+    <li>
+      <div class="vl-icon">💡</div>
+      <div class="vl-text"><strong>Transparency</strong><span>Clear communication, visit records, and rating histories — nothing hidden, no surprises.</span></div>
+    </li>
+    <li>
+      <div class="vl-icon">🌍</div>
+      <div class="vl-text"><strong>Community Impact</strong><span>Every match creates a real connection. We measure success by the lives improved, not just transactions completed.</span></div>
+    </li>
+    <li>
+      <div class="vl-icon">⭐</div>
+      <div class="vl-text"><strong>Quality Over Quantity</strong><span>Smart matching means fewer, better connections. We'd rather you find one perfect match than scroll through hundreds.</span></div>
+    </li>
+  </ul>
+</section>
+
+<!-- CTA -->
+<section class="about-cta">
+  <h2>Join the Community</h2>
+  <p>Whether you need support or want to offer it, Shallion has a place for you.</p>
+  
+</section>
+{% endblock %}

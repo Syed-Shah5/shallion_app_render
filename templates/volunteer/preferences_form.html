@@ -1,0 +1,228 @@
+{% extends 'volunteer/base_volunteer.html' %}
+{% load static %}
+
+{% block page_title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-sliders-h me-2"></i>{{ page_title }}
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Client Preferences -->
+                    <h5 class="mb-3">Client Preferences</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.preferred_gender.id_for_label }}" class="form-label">
+                                Preferred Gender
+                            </label>
+                            {{ form.preferred_gender }}
+                            {% if form.preferred_gender.errors %}
+                                <div class="text-danger small">{{ form.preferred_gender.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Leave blank for no preference</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Languages You Speak <span class="text-danger">*</span></label>
+                        <div class="row">
+                            {% for value, label in form.preferred_languages.field.choices %}
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_languages" value="{{ value }}"
+                                           id="lang_{{ value }}"
+                                           {% if value in form.preferred_languages.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="lang_{{ value }}">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.preferred_languages.errors %}
+                            <div class="text-danger small">{{ form.preferred_languages.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Schedule Availability -->
+                    <h5 class="mb-3 mt-4">Your Availability</h5>
+                    
+                    <div class="mb-3" data-required-group="preferred_days">
+                        <label class="form-label">Available Days <span class="text-danger">*</span></label>
+                        <div class="row">
+                            {% for value, label in form.preferred_days.field.choices %}
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_days" value="{{ value }}"
+                                           id="day_{{ value }}"
+                                           {% if value in form.preferred_days.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="day_{{ value }}">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-danger small d-none group-error">Please select at least one available day.</div>
+                        {% if form.preferred_days.errors %}
+                            <div class="text-danger small">{{ form.preferred_days.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3" data-required-group="preferred_times">
+                        <label class="form-label">Available Times <span class="text-danger">*</span></label>
+                        <div class="row">
+                            {% for value, label in form.preferred_times.field.choices %}
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_times" value="{{ value }}"
+                                           id="time_{{ value }}"
+                                           {% if value in form.preferred_times.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="time_{{ value }}">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-danger small d-none group-error">Please select at least one available time.</div>
+                        {% if form.preferred_times.errors %}
+                            <div class="text-danger small">{{ form.preferred_times.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Task Preferences -->
+                    <h5 class="mb-3 mt-4">Tasks You're Willing to Help With</h5>
+                    
+                    <div class="mb-3" data-required-group="preferred_tasks">
+                        <label class="form-label">Select Tasks <span class="text-danger">*</span></label>
+                        <div class="row">
+                            {% for value, label in form.preferred_tasks.field.choices %}
+                            <div class="col-md-4 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_tasks" value="{{ value }}"
+                                           id="task_{{ value }}"
+                                           {% if value in form.preferred_tasks.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="task_{{ value }}">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-danger small d-none group-error">Please select at least one task.</div>
+                        {% if form.preferred_tasks.errors %}
+                            <div class="text-danger small">{{ form.preferred_tasks.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Additional Preferences -->
+                    <h5 class="mb-3 mt-4">Additional Preferences</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                {{ form.can_work_with_pets }}
+                                <label class="form-check-label" for="{{ form.can_work_with_pets.id_for_label }}">
+                                    Willing to work in homes with pets
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                {{ form.has_transportation }}
+                                <label class="form-check-label" for="{{ form.has_transportation.id_for_label }}">
+                                    I have my own transportation
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.availability_notes.id_for_label }}" class="form-label">
+                            Additional Availability Notes
+                        </label>
+                        {{ form.availability_notes }}
+                        {% if form.availability_notes.errors %}
+                            <div class="text-danger small">{{ form.availability_notes.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Any specific availability information or restrictions (e.g., "Only available on weekends", "Prefer mornings")
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                    
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            {% if preferences %}Update Preferences{% else %}Save Preferences{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  -->
+<script>
+//Instant Checkbox Validation JS
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+
+    function validateGroup(groupDiv) {
+        const checkboxes = groupDiv.querySelectorAll('input[type="checkbox"]');
+        const errorDiv = groupDiv.querySelector('.group-error');
+        let anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+        if (!anyChecked) {
+            errorDiv.classList.remove('d-none');
+            return false;
+        } else {
+            errorDiv.classList.add('d-none');
+            return true;
+        }
+    }
+
+    // Instant validation on checkbox change
+    const groups = document.querySelectorAll('[data-required-group]');
+    groups.forEach(group => {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => validateGroup(group));
+        });
+    });
+
+    // Validate on form submit
+    form.addEventListener('submit', function(e) {
+        let valid = true;
+        groups.forEach(group => {
+            if (!validateGroup(group)) valid = false;
+        });
+        if (!valid) e.preventDefault();
+    });
+});
+</script>
+{% endblock %}

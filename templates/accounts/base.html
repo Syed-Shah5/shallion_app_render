@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shallion Dementia Support{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Shallion Logo">
+                <span>Shallion Dementia Support</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                <li><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                <li><a href="{% url 'how_it_works' %}" class="nav-link">How it Works</a></li>
+                <li><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                
+                {% if request.user.is_authenticated %}
+                    {% if request.user.role == 'ADMIN' or request.user.role == 'STAFF' %}
+                       
+                        <li>
+                        <li><a href="{% url 'accounts:admin_dashboard' %}"class="nav-link">Dashboard</a></li> 
+                        <li><a href="{% url 'accounts:admin_logout' %}" class="nav-link">Logout ({{ request.user.email }})</a></li>
+                        </li>
+                    {% elif request.user.role == 'CLIENT' %}
+                      
+                        <li><a href="{% url 'client:dashboard' %}" class="nav-link">Dashboard</a></li> 
+                        <li><a href="{% url 'accounts:client_logout' %}" class="nav-link">Logout ({{ request.user.email }})</a></li>
+                    {% elif request.user.role == 'VOLUNTEER' %}
+                       
+                        <li><a href="{% url 'volunteer:dashboard' %}" class="nav-link">Dashboard</a></li>
+                        <li><a href="{% url 'accounts:volunteer_logout' %}" class="nav-link">Logout ({{ request.user.email }})</a></li>
+                    {% else %}
+                        
+                        <li><a href="{% url 'logout' %}" class="nav-link">Logout ({{ request.user.email }})</a></li>
+                    {% endif %}
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle between login and register tabs
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    
+    if (tabButtons.length > 0 && loginForm && registerForm) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active tab
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show/hide forms
+                if (this.dataset.tab === 'login') {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                } else {
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                }
+            });
+        });
+    }
+});
+
+// Handle messages auto-remove
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+    const messages = document.querySelectorAll('.alert');
+        messages.forEach(message => {
+        message.style.transition = 'opacity 0.5s';
+        message.style.opacity = '0';
+        setTimeout(() => message.remove(), 500);
+        });
+},     5000);
+});
+</script>
+{% endblock %}
+</body>
+</html>

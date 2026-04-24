@@ -1,0 +1,306 @@
+{% extends 'volunteer/base_volunteer.html' %}
+{% load static %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'volunteer:edit_profile' %}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Edit Profile
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Profile Header -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center">
+                        {% if profile.profile_photo %}
+                            <img src="{{ profile.profile_photo.url }}" 
+                                 alt="{{ profile.full_name }}" 
+                                 class="profile-photo">
+                        {% else %}
+                            <div class="profile-photo-placeholder mx-auto">
+                                {{ profile.forename|first|upper }}{{ profile.surname|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        <h3>{{ profile.full_name }}</h3>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ profile.city }}, {{ profile.postcode }}
+                        </p>
+                        <div class="mb-3">
+                            {% if profile.is_verified %}
+                                <span class="badge bg-success me-2">
+                                    <i class="fas fa-check-circle me-1"></i>Verified Volunteer
+                                </span>
+                            {% endif %}
+                            <span class="badge bg-info">
+                                <i class="fas fa-calendar-alt me-1"></i>{{ profile.age }} years old
+                            </span>
+                        </div>
+                        {% if profile.bio %}
+                            <p>{{ profile.bio }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Personal Information Card -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-user me-2"></i>Personal Information
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th style="width: 40%">Full Name:</th>
+                        <td>{{ profile.full_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sex:</th>
+                        <td>{{ profile.get_gender_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth:</th>
+                        <td>{{ profile.date_of_birth|date:"F j, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>
+                            {% if profile.phone %}
+                                {{ profile.phone }}
+                            {% else %}
+                                <span class="text-muted">Not provided</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Address Card -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-map-marker-alt me-2"></i>Address
+            </div>
+            <div class="card-body">
+                <address>
+                    {{ profile.address_line1 }}<br>
+                    {% if profile.address_line2 %}
+                        {{ profile.address_line2 }}<br>
+                    {% endif %}
+                    {{ profile.city }}<br>
+                    {{ profile.postcode }}
+                </address>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Emergency Contact Card -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-phone-alt me-2"></i>Emergency Contact
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th style="width: 40%">Name:</th>
+                        <td>{{ profile.emergency_contact_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Relationship:</th>
+                        <td>{{ profile.emergency_contact_relationship }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>{{ profile.emergency_contact_phone }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Skills Card -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-star me-2"></i>Skills & Experience
+            </div>
+            <div class="card-body">
+                {% if profile.skills_description %}
+                    <p>{{ profile.skills_description|linebreaks }}</p>
+                {% else %}
+                    <p class="text-muted">No skills description provided.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Preferences Section -->
+    {% if preferences %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-heart me-2"></i>Your Preferences</span>
+                <a href="{% url 'volunteer:edit_preferences' %}" class="btn btn-sm btn-outline-light">
+                    <i class="fas fa-edit me-1"></i>Edit Preferences
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h6>Client Preferences:</h6>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <th style="width: 40%">Preferred Gender:</th>
+                                <td>
+                                    {% if preferences.preferred_gender %}
+                                        {{ preferences.get_preferred_gender_display }}
+                                    {% else %}
+                                        <span class="text-muted">No preference</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Preferred Languages:</th>
+                                <td>
+                                    {% if preferences.preferred_languages %}
+                                        {% for lang in preferences.get_preferred_languages_display %} 
+                                            <span class="badge bg-secondary me-1">{{ lang }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">Not specified</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                     
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <h6>Availability:</h6>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <th style="width: 40%">Available Days:</th>
+                                <td>
+                                    {% for day in preferences.get_preferred_days_display %}
+                                        <span class="badge bg-secondary me-1">{{ day }}</span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Available Times:</th>
+                                <td>
+                                    {% for time in preferences.get_preferred_times_display %}
+                                        <span class="badge bg-info text-dark me-1">{{ time }}</span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                     
+                        </table>
+                    </div>
+                    
+                    <div class="col-12">
+                        <h6>Tasks Willing to Help With:</h6>
+                        <div class="mb-3">
+                            {% for task in preferences.get_preferred_tasks_display %}
+                                <span class="badge-task">{{ task }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <h6>Additional Preferences:</h6>
+                        <div class="mb-3">
+                            {% if preferences.can_work_with_pets %}
+                                <span class="badge bg-success me-2">
+                                    <i class="fas fa-paw me-1"></i>Pet friendly
+                                </span>
+                            {% endif %}
+                            {% if preferences.has_transportation %}
+                                <span class="badge bg-success me-2">
+                                    <i class="fas fa-car me-1"></i>Has transportation
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if preferences.availability_notes %}
+                    <div class="col-12">
+                        <h6>Availability Notes:</h6>
+                        <p>{{ preferences.availability_notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info alert-custom">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>You haven't set your preferences yet!</strong>
+            <a href="{% url 'volunteer:create_preferences' %}" class="alert-link">Set your preferences now</a> to help us match you with clients.
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Account Information -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cog me-2"></i>Account Information
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Account Created:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Profile Completed:</strong> 
+                            {% if profile.profile_completed %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-warning">No</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Danger Zone -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="fas fa-exclamation-triangle me-2"></i>Danger Zone
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Once you delete your account, there is no going back. Please be certain.</p>
+                <a href="{% url 'volunteer:delete_account' %}" class="btn btn-outline-danger">
+                    <i class="fas fa-trash-alt me-2"></i>Delete Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

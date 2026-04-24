@@ -1,0 +1,340 @@
+{% extends 'volunteer/base_volunteer.html' %}
+{% load static %}
+
+{% block page_title %}Volunteer Dashboard{% endblock %}
+
+{% block page_actions %}
+    {% if not profile.profile_completed %}
+        <a href="{% url 'volunteer:create_profile' %}" class="btn btn-primary">
+            <i class="fas fa-user-plus me-2"></i>Complete Profile
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Welcome Section -->
+    <div class="col-12 mb-4">
+        <div class="profile-header d-flex align-items-center">
+            <div class="flex-shrink-0">
+                {% if profile.profile_photo %}
+                    <img src="{{ profile.profile_photo.url }}" alt="{{ profile.full_name }}" 
+                         class="profile-photo">
+                {% else %}
+                    <div class="profile-photo-placeholder">
+                        {{ profile.forename|first|upper }}{{ profile.surname|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="flex-grow-1 ms-4">
+                <h2>Welcome back, {{ profile.forename }}!</h2>
+                <p class="mb-2">Thank you for your commitment to helping others in your community.</p>
+                {% if profile.is_verified %}
+                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Verified Volunteer</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="col-md-4 mb-4">
+        <div class="stat-card">
+            <i class="fas fa-hand-holding-heart"></i>
+            <div class="stat-value">{% if matched_clients %}{{ matched_clients|length }}{% else %}0{% endif %}</div>
+            <div class="stat-label">Current Matches</div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <div class="stat-value">
+                {% if preferences %}
+                    {{ preferences.preferred_days|length }} days
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            <div class="stat-label">Available Days</div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="stat-card">
+            <i class="fas fa-tasks"></i>
+            <div class="stat-value">
+                {% if preferences %}
+                    {{ preferences.preferred_tasks|length }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            <div class="stat-label">Skills Offered</div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Completion Warning -->
+{% if not profile.profile_completed %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info alert-custom">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Your profile is incomplete!</strong> 
+            Please complete your profile and set your preferences to start matching with clients.
+            <a href="{% url 'volunteer:create_profile' %}" class="alert-link">Complete now →</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-bolt me-2"></i>Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'volunteer:edit_preferences' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-sliders-h me-2"></i>Update Preferences
+                    </a>
+                    <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#availabilityModal">
+                        <i class="fas fa-calendar-alt me-2"></i>Update Availability
+                    </a>
+                    <a href="{% url 'volunteer:view_profile' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-eye me-2"></i>View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Current Preferences Summary -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-heart me-2"></i>Your Current Preferences
+            </div>
+            <div class="card-body">
+                {% if preferences %}
+                    <h6>Tasks You Can Help With:</h6>
+                    <div class="mb-3">
+                        {% for task in preferences.get_preferred_tasks_display %}
+                            <span class="badge-task">{{ task }}</span>
+                        {% empty %}
+                            <span class="text-muted">No tasks selected</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <h6>Available Days:</h6>
+                    <div class="mb-3">
+                        {% for day in preferences.get_preferred_days_display %}
+                            <span class="badge bg-secondary me-1">{{ day }}</span>
+                        {% empty %}
+                            <span class="text-muted">No days selected</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <h6>Available Times:</h6>
+                    <div class="mb-3">
+                        {% for time in preferences.get_preferred_times_display %}
+                            <span class="badge bg-info text-dark me-1">{{ time }}</span>
+                        {% empty %}
+                            <span class="text-muted">No times selected</span>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if preferences.has_transportation %}
+                        <span class="badge bg-success"><i class="fas fa-car me-1"></i>Has transportation</span>
+                    {% endif %}
+                    {% if preferences.can_work_with_pets %}
+                        <span class="badge bg-success"><i class="fas fa-paw me-1"></i>Pet friendly</span>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted">No preferences set yet.</p>
+                    <a href="{% url 'volunteer:create_preferences' %}" class="btn btn-primary btn-sm">
+                        Set Preferences
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Ratings Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-star me-2"></i>Your Ratings
+                    </div>
+              
+                </div>
+            </div>
+            <div class="card-body">
+                {% if ratings %}
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="h3 text-warning">{{ avg_rating|floatformat:1 }}<span class="fs-5">/5</span></div>
+                                <div class="stars">
+                                    {% for i in "12345"|make_list %}
+                                        {% if i|add:"0" <= avg_rating %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <small class="text-muted d-block mt-2">Based on {{ total_ratings }} rating{{ total_ratings|pluralize }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            {% for rating in ratings %}
+                                <div class="mb-2 pb-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ rating.match.client.full_name }}</strong>
+                                            <small class="text-muted d-block">{{ rating.created_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        <div class="text-warning">
+                                            {% for i in "12345"|make_list %}
+                                                {% if i|add:"0" <= rating.rating_score %}
+                                                    <i class="fas fa-star"></i>
+                                                {% else %}
+                                                    <i class="far fa-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% if rating.feedback %}
+                                        <small class="text-muted d-block mt-1">{{ rating.feedback|truncatewords:15 }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-center text-muted my-4">
+                        <i class="fas fa-star fa-2x mb-2"></i><br>
+                        No ratings yet. Complete matches to receive ratings from clients!
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Availability Modal -->
+<div class="modal fade" id="availabilityModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Quick Update Availability</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="availabilityForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Available Days</label>
+                        <div class="row">
+                            {% for day in preferences.DAY_CHOICES %}
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_days" value="{{ day.0 }}"
+                                           {% if day.0 in preferences.preferred_days %}checked{% endif %}>
+                                    <label class="form-check-label">{{ day.1 }}</label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Available Times</label>
+                        <div class="row">
+                            {% for time in preferences.TIME_CHOICES %}
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="preferred_times" value="{{ time.0 }}"
+                                           {% if time.0 in preferences.preferred_times %}checked{% endif %}>
+                                    <label class="form-check-label">{{ time.1 }}</label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" name="availability_notes" 
+                                  rows="3">{{ preferences.availability_notes }}</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveAvailability()">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function saveAvailability() {
+    var form = document.getElementById('availabilityForm');
+    var formData = new FormData(form);
+
+    fetch('{% url "volunteer:update_availability" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('availabilityModal')).hide();
+            showNotification('Availability updated successfully!', 'success');
+            setTimeout(function() { location.reload(); }, 1500);
+        } else {
+            showNotification('Error updating availability', 'error');
+        }
+    })
+    .catch(function() {
+        showNotification('An error occurred', 'error');
+    });
+}
+
+function showNotification(message, type) {
+    var alertClass = type === 'success' ? 'alert-success' : 
+                    type === 'error' ? 'alert-danger' : 'alert-info';
+    var notification = `
+        <div class="alert ${alertClass} alert-custom alert-dismissible fade show" role="alert">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    document.querySelector('.main-content').insertAdjacentHTML('afterbegin', notification);
+    setTimeout(function() {
+        var alert = document.querySelector('.main-content .alert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(function() { alert.remove(); }, 500);
+        }
+    }, 3000);
+}
+</script>
+{% endblock %}

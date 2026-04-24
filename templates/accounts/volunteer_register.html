@@ -1,0 +1,728 @@
+{% extends 'base.html' %}
+
+{% block title %}Volunteer Registration - Shallion Dementia Support{% endblock %}
+
+{% block nav_links %}
+<a href="{% url 'home' %}">Home</a>
+<a href="{% url 'about' %}">About</a>
+<a href="{% url 'how_it_works' %}">How It Works</a>
+<a href="{% url 'contact' %}">Contact</a>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-container {
+        background: linear-gradient(135deg, #8B3A2A 0%, #7a3224 100%);
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    
+    .auth-box {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        animation: slideUp 0.5s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-header h2 {
+        color:black;
+        font-size: 28px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    
+    .auth-header p {
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+    
+    .tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    }
+
+    .tab-btn:hover {
+    background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+    background: #8B3A2A;
+    color: white;
+    }
+
+
+    .tabs a.tab-btn {
+    border: none;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #8B3A2A;
+        box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.2);
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    
+    .checkbox-group label {
+        margin: 0;
+        cursor: pointer;
+        color: #2c3e50;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    .btn-primary {
+        background: #8B3A2A;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #7a3224;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+    
+    .btn-outline {
+        background: white;
+        color: #2c3e50;
+        border: 2px solid #e0e0e0;
+        margin-top: 10px;
+    }
+    
+    .btn-outline:hover {
+        background: #8B3A2A;
+        border-color: #8B3A2A;
+    }
+    
+    .auth-switch {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .auth-switch a {
+        color: #8B3A2A;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .auth-switch a:hover {
+        text-decoration: underline;
+    }
+    
+    .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+    
+    .form-control.error {
+        border-color: #e74c3c;
+        background: #fff5f5;
+    }
+    
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        animation: slideIn 0.3s ease;
+    }
+    
+    .alert-error {
+        background: #fff5f5;
+        border: 2px solid #e74c3c;
+        color: #e74c3c;
+    }
+    
+    .password-requirements {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    
+    .password-requirements ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .password-requirements li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .password-requirements li::before {
+        content: '○';
+        color: #95a5a6;
+        font-size: 16px;
+    }
+    
+    .password-requirements li.valid::before {
+        content: '✓';
+        color: #27ae60;
+    }
+    
+    .password-requirements li.invalid::before {
+        content: '○';
+        color: #95a5a6;
+    }
+    
+    .pvg-info {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 5px;
+        font-style: italic;
+    }
+.password-requirements {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.password-requirement {
+    display: block;
+    color: #666;
+    margin: 3px 0;
+}
+
+.password-requirement.valid {
+    color: #28a745;
+}
+
+.password-requirement.valid::before {
+    content: "✓ ";
+}
+
+.password-requirement.invalid {
+    color: #dc3545;
+}
+
+.password-requirement.invalid::before {
+    content: "✗ ";
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+input.error {
+    border-color: #dc3545;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control.error {
+    border-color: #dc3545;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #8B3A2A;
+    box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.2);
+}
+
+.form-control.error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Volunteer Registration & Login</h2>
+            <p>Join our community of volunteers</p>
+        </div>
+        
+        <div class="tabs">
+            <a href="{% url 'accounts:volunteer_login' %}" 
+                class="tab-btn {% if request.resolver_match.url_name == 'volunteer_login' %}active{% endif %}">
+                Login
+            </a>
+
+            <a href="{% url 'accounts:volunteer_register' %}" 
+                class="tab-btn {% if request.resolver_match.url_name == 'volunteer_register' %}active{% endif %}">
+                Register
+            </a>
+        </div>
+        
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="POST" id="register-form">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-error">
+                {% for field, errors in form.errors.items %}
+                    {% if field != '__all__' %}
+                        {% for error in errors %}
+                            {{ field|title }}: {{ error }}<br>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_full_name">Full Name:</label>
+                <input type="text" 
+                       name="full_name" 
+                       id="id_full_name" 
+                       class="form-control {% if form.full_name.errors %}error{% endif %}" 
+                       placeholder="Enter your full name" 
+                       required
+                       value="{{ form.full_name.value|default:'' }}">
+                {% if form.full_name.errors %}
+                <div class="error-message">{{ form.full_name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email">Email:</label>
+                <input type="email" 
+                       name="email" 
+                       id="id_email" 
+                       class="form-control {% if form.email.errors %}error{% endif %}" 
+                       placeholder="Enter your email" 
+                       required
+                       value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_phone">Phone:</label>
+                <input type="tel" 
+                       name="phone" 
+                       id="id_phone" 
+                       class="form-control {% if form.phone.errors %}error{% endif %}" 
+                       placeholder="Enter your phone number"
+                       value="{{ form.phone.value|default:'' }}">
+                {% if form.phone.errors %}
+                <div class="error-message">{{ form.phone.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1">Create Password:</label>
+                <input type="password" 
+                       name="password1" 
+                       id="id_password1" 
+                       class="form-control {% if form.password1.errors %}error{% endif %}" 
+                       placeholder="Enter password" 
+                       required>
+                {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors.0 }}</div>
+                {% endif %}
+                
+                <div class="password-requirements">
+                    <ul>
+                        <li class="password-requirement" data-requirement="length">At least 8 characters</li>
+                        <li class="password-requirement" data-requirement="uppercase">One uppercase letter</li>
+                        <li class="password-requirement" data-requirement="lowercase">One lowercase letter</li>
+                        <li class="password-requirement" data-requirement="number">One number</li>
+                        <li class="password-requirement" data-requirement="special">One special character</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password2">Confirm Password:</label>
+                <input type="password" 
+                       name="password2" 
+                       id="id_password2" 
+                       class="form-control {% if form.password2.errors %}error{% endif %}" 
+                       placeholder="Confirm password" 
+                       required>
+                {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_pvg_number">PVG Number:</label>
+                <input type="text" 
+                       name="pvg_number" 
+                       id="id_pvg_number" 
+                       class="form-control {% if form.pvg_number.errors %}error{% endif %}" 
+                       placeholder="Enter your PVG number" 
+                       required
+                       value="{{ form.pvg_number.value|default:'' }}">
+                <div class="pvg-info">(Protecting Vulnerable Groups)</div>
+                {% if form.pvg_number.errors %}
+                <div class="error-message">{{ form.pvg_number.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" 
+                       name="terms_accepted" 
+                       id="id_terms_accepted" 
+                       required
+                       {% if form.terms_accepted.value %}checked{% endif %}>
+                <label for="id_terms_accepted">
+                    I agree to Volunteer Terms & Conditions and Code of Conduct
+                </label>
+                {% if form.terms_accepted.errors %}
+                <div class="error-message">{{ form.terms_accepted.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Register as Volunteer</button>
+                <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
+            </div>
+            
+        </form>
+           
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // TAB SWITCHING
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+
+    if (tabButtons.length && loginForm && registerForm) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                if (this.dataset.tab === 'login') {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                } else {
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                }
+            });
+        });
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+    }
+
+    // INPUTS
+    const form = document.getElementById('register-form');
+    const emailInput = document.getElementById('id_email');
+    const fullNameInput = document.getElementById('id_full_name');
+    const phoneInput = document.getElementById('id_phone');
+    const pvgInput = document.getElementById('id_pvg_number');
+    const passwordInput = document.getElementById('id_password1');
+    const confirmPasswordInput = document.getElementById('id_password2');
+    const termsCheckbox = document.getElementById('id_terms_accepted');
+
+    // HELPERS
+    function showError(input, message) {
+        input.classList.add('error');
+        let errorDiv = input.parentNode.querySelector('.error-message');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.setAttribute('role', 'alert');
+            errorDiv.setAttribute('aria-live', 'assertive');
+            input.parentNode.appendChild(errorDiv);
+        }
+        errorDiv.textContent = message;
+    }
+
+    function clearError(input) {
+        input.classList.remove('error');
+        const errorDiv = input.parentNode.querySelector('.error-message');
+        if (errorDiv) errorDiv.remove();
+    }
+
+    // VALIDATORS
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validatePhone(phone) {
+        const normalized = phone.replace(/[\s\-]/g, '');
+        return /^(0\d{10}|\+44\d{10})$/.test(normalized);
+    }
+
+    function validateFullName(name) {
+        const trimmed = name.trim();
+        if (!trimmed) return false;
+        const words = trimmed.split(/\s+/);
+        if (words.length < 2) return false;
+        return words.every(word => /^[a-zA-Z\-\']+$/.test(word));
+    }
+
+    function validatePVGNumber(value) {
+        const normalized = value.replace(/[\s\-]/g, '');
+        return /^\d{16}$/.test(normalized);
+    }
+
+    function checkPasswordStrength(password) {
+        return {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+    }
+
+    function updatePasswordRequirements(password) {
+        const requirements = checkPasswordStrength(password);
+
+        document.querySelectorAll('.password-requirement').forEach(el => {
+            const req = el.dataset.requirement;
+
+            el.classList.toggle('valid', requirements[req]);
+            el.classList.toggle('invalid', !requirements[req]);
+        });
+    }
+
+    // PASSWORD EVENTS
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            updatePasswordRequirements(this.value);
+        });
+    }
+
+    if (confirmPasswordInput && passwordInput) {
+        confirmPasswordInput.addEventListener('input', function() {
+            if (this.value && this.value !== passwordInput.value) {
+                showError(this, 'Passwords do not match');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+
+    // PVG FORMAT + VALIDATION
+    if (pvgInput) {
+        pvgInput.addEventListener('input', function() {
+            let value = this.value.replace(/[\s\-]/g, '').slice(0, 16);
+
+            const groups = value.match(/.{1,4}/g);
+            this.value = groups ? groups.join(' ') : value;
+
+            clearError(this);
+        });
+
+        pvgInput.addEventListener('blur', function() {
+            clearError(this);
+
+            if (!this.value.trim()) {
+                showError(this, 'PVG number is required.');
+            } else if (!validatePVGNumber(this.value)) {
+                showError(this, 'Enter a valid 16-digit PVG number.');
+            }
+        });
+    }
+
+    // REAL-TIME VALIDATION
+    if (fullNameInput) {
+        fullNameInput.addEventListener('blur', function() {
+            clearError(this);
+
+            if (!validateFullName(this.value)) {
+                showError(this, 'Enter a valid full name.');
+            }
+        });
+    }
+
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            clearError(this);
+
+            if (!validateEmail(this.value)) {
+                showError(this, 'Enter a valid email.');
+            }
+        });
+    }
+
+    if (phoneInput) {
+        phoneInput.addEventListener('blur', function() {
+            clearError(this);
+
+            if (!validatePhone(this.value)) {
+                showError(this, 'Enter a valid UK mobile number.');
+            }
+        });
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('blur', function() {
+            clearError(this);
+            const score = Object.values(checkPasswordStrength(this.value)).filter(Boolean).length;
+            if (score < 3) {
+                showError(this, 'Password is too weak.');
+            }
+        });
+    }
+
+    // SUBMIT VALIDATION
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            const inputs = [fullNameInput, emailInput, phoneInput, pvgInput, passwordInput, confirmPasswordInput];
+            inputs.forEach(input => input && clearError(input));
+
+            if (!validateFullName(fullNameInput?.value || '')) {
+                showError(fullNameInput, 'Enter a valid full name.');
+                isValid = false;
+            }
+
+            if (!validateEmail(emailInput?.value || '')) {
+                showError(emailInput, 'Enter a valid email.');
+                isValid = false;
+            }
+
+            if (!validatePhone(phoneInput?.value || '')) {
+                showError(phoneInput, 'Enter a valid UK mobile number.');
+                isValid = false;
+            }
+
+            if (!validatePVGNumber(pvgInput?.value || '')) {
+                showError(pvgInput, 'Enter a valid 16-digit PVG number.');
+                isValid = false;
+            }
+
+            const password = passwordInput?.value || '';
+            const confirmPassword = confirmPasswordInput?.value || '';
+            const score = Object.values(checkPasswordStrength(password)).filter(Boolean).length;
+            if (score < 3) {
+                showError(passwordInput, 'Password is too weak.');
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError(confirmPasswordInput, 'Passwords do not match.');
+                isValid = false;
+            }
+
+            if (termsCheckbox && !termsCheckbox.checked) {
+                showError(termsCheckbox, 'You must accept the terms.');
+                isValid = false;
+            }
+
+            if (!isValid) e.preventDefault();
+        });
+    }
+
+});
+</script>
+{% endblock %}
